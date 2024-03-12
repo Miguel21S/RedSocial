@@ -1,0 +1,69 @@
+
+import { Schema, model, Document, Types } from "mongoose";
+
+interface Role {
+    name: string;
+}
+interface User extends Document {
+    name: string;
+    email: string;
+    password: string;
+    role?: Role;
+    seguidores?: Schema.Types.ObjectId;
+    siguiendo?: Schema.Types.ObjectId[];
+    post?: Schema.Types.ObjectId;
+}
+
+const UserSchema = new Schema <User>(
+    {
+        name: {
+            type: String,
+            required: false,
+        },
+
+        email: {
+            type: String,
+            required: false,
+            unique: true,
+        },
+
+        password: {
+            type: String,
+            required: false,
+        },
+
+        role: {
+            type: String,
+            enum: ["user", "admin", "superAdmin"],
+            default: "user",
+        },
+        seguidores: [  // IDs de usuarios que siguen a este usuario
+            {
+                type: Schema.Types.ObjectId,
+                ref: "UserModel"
+            }
+        ],
+
+        siguiendo:   // IDs de usuarios que este usuario sigue
+            [{
+                type: Schema.Types.ObjectId,
+                ref: "UserModel"
+            }
+        ],
+
+        post: [  // IDs de publicaciones hechas por este usuario
+            {
+                type: Schema.Types.ObjectId,
+                ref: "PostModel"
+            }
+        ]
+    },
+    {
+        timestamps: true,
+        versionKey: false,
+    }
+)
+
+const UserModel = model<User>("User", UserSchema);
+
+export default UserModel;
