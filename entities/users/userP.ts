@@ -156,6 +156,42 @@ const filtrarPorEmail = async (req: Request, res: Response) => {
     }
 }
 
+const EliminarPorId = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.id;
+        
+        const confirmar = await UserModel.findOne(
+            {
+                _id:userId
+            }
+        )
+
+        if(!confirmar){
+            return res.status(404).json(
+                {
+                    success: false,
+                    message: "Usuario no existe en el sistema"
+                }
+            )
+        }
+        const deleteUser = await UserModel.findByIdAndDelete(userId)
+
+        res.status(200).json(
+            {
+                success: true,
+                message: "Usuario eliminado con suceso"
+            }
+        )
+    } catch (error) {
+        res.status(500).json(
+            {
+                success: false,
+                message: "Error al intentar eliminar usuario"
+            }
+        )
+    }
+}
+
 export {
-    ListarTodosUsuarios, actualizarUsuario, filtrarPorEmail
+    ListarTodosUsuarios, actualizarUsuario, filtrarPorEmail, EliminarPorId
 }

@@ -9,6 +9,7 @@ const router = Router();
 router.get('/users/profile', auth, usarios.ListarTodosUsuarios);
 router.put('/users/profile', auth, usarios.actualizarUsuario);
 router.get('/users', auth, usarios.filtrarPorEmail);
+router.delete('/users/:id', usarios.EliminarPorId);
 
 
 
