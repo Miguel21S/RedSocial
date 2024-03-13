@@ -156,6 +156,7 @@ const filtrarPorEmail = async (req: Request, res: Response) => {
     }
 }
 
+/////////////////          MÉTODO ELIMINAR POR ID         /////////////////////////////////
 const EliminarPorId = async (req: Request, res: Response) => {
     try {
         const userId = req.params.id;
@@ -192,6 +193,44 @@ const EliminarPorId = async (req: Request, res: Response) => {
     }
 }
 
+/////////////////          MÉTODO BUSCAR POR EMAIL         /////////////////////////////////
+const actualizarRolePorId = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.id;
+        const role = req.body.role;
+
+        const updateRole = await UserModel.findOneAndUpdate(
+            {
+                _id: userId
+            },
+            {
+                role: role
+            },
+            {
+                new: true
+            }
+        )
+
+        if (!updateRole) {
+            return res.status(404).json({
+                success: false,
+                message: "Usuario no encontrado"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Role actualizado con éxito"
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error al actualizar Role"
+        });
+    }
+}
+
 export {
-    ListarTodosUsuarios, actualizarUsuario, filtrarPorEmail, EliminarPorId
+    ListarTodosUsuarios, actualizarUsuario, filtrarPorEmail,
+    EliminarPorId, actualizarRolePorId
 }
