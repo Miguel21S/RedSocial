@@ -1,9 +1,10 @@
 
-import { Document, Schema, model } from "mongoose";
+import { Document, ObjectId, Schema, model } from "mongoose";
 
 
 interface Post extends Document {
     userPost: Schema.Types.ObjectId;
+    id: ObjectId;
     name: string;
     title: string;
     contenido: String;
@@ -18,6 +19,7 @@ const PostSchema = new Schema<Post>(
             ref: "UserModel"
         },
 
+        id: Object,
         name: String,
         title: String,
         contenido: String,

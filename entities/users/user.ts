@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import UserModel from "./UsersModel";
 import bcrypt from "bcrypt";
+
 // import { CustomRequest } from "../../core/middlewares/auth";
 
 // export const addSiguiendo = async (req: CustomRequest, res: Response) => {
@@ -63,7 +64,10 @@ import bcrypt from "bcrypt";
 /////////////////          MÉTODO LISTAR TODOS LOS USUARIOS         /////////////////////////////////
 const ListarTodosUsuarios = async (req: Request, res: Response) => {
     try {
-        const lista = await UserModel.find().select("name").select("email")
+        const lista = await UserModel.find()
+            .select("name")
+            .select("email")
+
         res.status(200).json(
             {
                 success: true,
