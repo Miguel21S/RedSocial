@@ -202,7 +202,32 @@ const listarMisPosts = async (req: Request, res: Response) => {
         )
     }
 }
+
+///////////////////////////          MÉTODO LISTAR POSTS       /////////////////////////////
+const listarPosts = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+
+        const listPosts = await PostModel.find()
+
+        res.status(200).json(
+            {
+                success: true,
+                message: "Lista encontrado con succeso",
+                data: listPosts
+            }
+        )
+    } catch (error) {
+        res.status(500).json(
+            {
+                success: false,
+                message: "Error en listar los posts"
+            }
+        )
+    }
+}
+
 export {
     crearPost, EliminarPostPorId, actualizarPostPorId,
-    listarMisPosts
+    listarMisPosts, listarPosts
 }
