@@ -99,7 +99,7 @@ const EliminarPostPorId = async (req: Request, res: Response) => {
 
 }
 
-///////////////////////////          MÉTODO ACTUALIZAR POST POR ID          /////////////////////////////////////
+///////////////////////////          MÉTODO ACTUALIZAR POST POR ID       /////////////////////////////
 const actualizarPostPorId = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId
@@ -172,6 +172,37 @@ const actualizarPostPorId = async (req: Request, res: Response) => {
     }
 }
 
+///////////////////////////          MÉTODO LISTAR MIS POSTS       /////////////////////////////
+const listarPosts = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+
+        const user = await UserModel.findOne
+            (
+                { _id: userId }
+            )
+
+        const userIdEnPost = await PostModel.find(
+            { id: user?.id }
+        )
+
+        res.status(200).json(
+            {
+                success: true,
+                message: "Tus lista de posts",
+                data: userIdEnPost
+            }
+        )
+    } catch (error) {
+        res.status(500).json(
+            {
+                success: true,
+                message: "Error en listar tus posts",
+            }
+        )
+    }
+}
 export {
-    crearPost, EliminarPostPorId, actualizarPostPorId
+    crearPost, EliminarPostPorId, actualizarPostPorId,
+    listarPosts
 }
