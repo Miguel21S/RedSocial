@@ -9,7 +9,7 @@ const crearPost = async (req: Request, res: Response) => {
         const { title, contenido } = req.body;
 
         const user = await UserModel.findOne({ _id: userId })
-       
+
         const publicarPost = await PostModel.create(
             {
                 title,
@@ -42,7 +42,6 @@ const EliminarPostPorId = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
         const postId = req.params.id;
-        const id = req.params.id;
 
         const user = await UserModel.findOne(
             {
@@ -56,13 +55,22 @@ const EliminarPostPorId = async (req: Request, res: Response) => {
             }
         )
 
+        if (!encontartPostId) {
+            return res.status(404).json(
+                {
+                    success: false,
+                    message: "Post no encontrado"
+                }
+            )
+        }
+
         const userIdEnPost = await PostModel.findOne(
-            
-              {  id: encontartPostId?.id}
-            
+            {
+                id: encontartPostId?.id
+            }
         )
 
-        if(userIdEnPost?.id !== user?.id){
+        if (userIdEnPost?.id !== user?.id) {
             return res.status(404).json(
                 {
                     success: false,
@@ -72,15 +80,6 @@ const EliminarPostPorId = async (req: Request, res: Response) => {
 
         }
 
-        if(!encontartPostId){
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "Post no encontrado"
-                }
-            )
-        }
-        
         const deletePost = await PostModel.findByIdAndDelete(postId)
 
         res.status(200).json(
@@ -100,6 +99,79 @@ const EliminarPostPorId = async (req: Request, res: Response) => {
 
 }
 
+///////////////////////////          MÉTODO ACTUALIZAR POST POR ID          /////////////////////////////////////
+const actualizarPostPorId = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId
+        const postId = req.params.id;
+        const { title, contenido } = req.body
+
+        const user = await UserModel.findOne(
+            {
+                _id: userId
+            }
+        )
+
+        const encontartPostId = await PostModel.findOne(
+            {
+                _id: postId
+            }
+        )
+
+        if (!encontartPostId) {
+            return res.status(404).json(
+                {
+                    success: false,
+                    message: "Post no encontrado"
+                }
+            )
+        }
+
+        const userIdEnPost = await PostModel.findOne(
+            {
+                id: encontartPostId?.id
+            }
+        )
+
+        if (userIdEnPost?.id !== user?.id) {
+            return res.status(404).json(
+                {
+                    success: false,
+                    message: "Usuario no tienes permiso para editar Post"
+                }
+            )
+        }
+
+        const updatePost = await PostModel.findByIdAndUpdate(
+            {
+                _id: postId
+            },
+            {
+                title: title,
+                contenido: contenido
+            },
+            {
+                new: true
+            }
+        )
+
+        res.status(200).json(
+            {
+                success: true,
+                message: "Post actualizado con suceso"
+            }
+        )
+
+    } catch (error) {
+        res.status(500).json(
+            {
+                success: false,
+                message: "Error al intentar actualizar el post"
+            }
+        )
+    }
+}
+
 export {
-    crearPost, EliminarPostPorId
+    crearPost, EliminarPostPorId, actualizarPostPorId
 }
