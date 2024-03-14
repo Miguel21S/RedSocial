@@ -9,7 +9,7 @@ const router = Router();
 router.post('/post', auth, posts.crearPost);
 router.delete('/posts/:id', auth, posts.EliminarPostPorId);
 router.put('/posts/:id', auth, posts.actualizarPostPorId);
-router.get('/posts', auth, posts.listarPosts);
+router.get('/posts', auth, posts.listarMisPosts);
 
 
 

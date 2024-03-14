@@ -173,7 +173,7 @@ const actualizarPostPorId = async (req: Request, res: Response) => {
 }
 
 ///////////////////////////          MÉTODO LISTAR MIS POSTS       /////////////////////////////
-const listarPosts = async (req: Request, res: Response) => {
+const listarMisPosts = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
 
@@ -204,5 +204,5 @@ const listarPosts = async (req: Request, res: Response) => {
 }
 export {
     crearPost, EliminarPostPorId, actualizarPostPorId,
-    listarPosts
+    listarMisPosts
 }
