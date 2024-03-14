@@ -2,31 +2,33 @@
 import { Document, Schema, model } from "mongoose";
 
 
-interface Post extends Document{
+interface Post extends Document {
     userPost: Schema.Types.ObjectId;
+    title: string;
     contenido: String;
     likes?: Schema.Types.ObjectId;
     comentarios?: Schema.Types.ObjectId;
 }
-const PostSchema = new Schema <Post>(
+const PostSchema = new Schema<Post>(
     {
         userPost:   // ID del usuario que hizo la publicación
-            {
-                type: Schema.Types.ObjectId,
-                ref: "UserModel"
-            },
+        {
+            type: Schema.Types.ObjectId,
+            ref: "UserModel"
+        },
 
+        title: String,
         contenido: String,
 
         likes:  // IDs de usuarios que han dado like a esta publicación
-            {
-                type:Schema.Types.ObjectId,
-                ref: "UserModel"
-            },
+        {
+            type: Schema.Types.ObjectId,
+            ref: "UserModel"
+        },
 
         comentarios: [  // IDs de comentarios en esta publicación
             {
-                type:Schema.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "ComentarioModel"
             }
         ],

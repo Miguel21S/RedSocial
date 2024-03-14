@@ -4,7 +4,8 @@ import bodyParser from "body-parser";
 import "dotenv/config";
 import { dbConnection } from "../entities/database/db";
 import routerController from "../entities/controllers/routes";
-import routesUser from "../entities/users/routes";
+import routerUser from "../entities/users/routes";
+import routerPost from "../entities/posts/routes";
 
 
 const app: Application = express();
@@ -12,7 +13,8 @@ const PORT = process.env.PORT || 4998;
 app.use(bodyParser.json());
 
 app.use('/api', routerController);
-app.use('/api', routesUser);
+app.use('/api', routerUser);
+app.use('/api', routerPost);
 
 dbConnection()
     .then(() => {

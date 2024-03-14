@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import UserModel from "../models/Users";
+import UserModel from "../users/UsersModel";
 
 ////////////   MÉTODO REGISTRAR USUARIO   //////////////////////////
 const registrar = async (req: Request, res: Response) => {

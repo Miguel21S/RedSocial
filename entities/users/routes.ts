@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import * as usarios from "./userP";
+import * as usarios from "./user";
 import { auth } from "../../core/middlewares/auth";
 
 const router = Router();

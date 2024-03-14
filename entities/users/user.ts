@@ -1,6 +1,6 @@
 // userP.ts
 import { Request, Response } from "express";
-import UserModel from "../models/Users";
+import UserModel from "./UsersModel";
 import bcrypt from "bcrypt";
 // import { CustomRequest } from "../../core/middlewares/auth";
 
