@@ -4,6 +4,7 @@ import { Document, Schema, model } from "mongoose";
 
 interface Post extends Document {
     userPost: Schema.Types.ObjectId;
+    name: string;
     title: string;
     contenido: String;
     likes?: Schema.Types.ObjectId;
@@ -17,6 +18,7 @@ const PostSchema = new Schema<Post>(
             ref: "UserModel"
         },
 
+        name: String,
         title: String,
         contenido: String,
 
