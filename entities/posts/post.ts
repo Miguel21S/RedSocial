@@ -227,7 +227,44 @@ const listarPosts = async (req: Request, res: Response) => {
     }
 }
 
+///////////////////////////          MÉTODO LISTAR POSTS POR ID      /////////////////////////////
+const listarPostPorId = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+        const postId = req.params.id;
+
+        const listPost = await PostModel.findOne
+        (
+            { _id: postId }
+        )
+
+        if(!listPost){
+           return res.status(404).json(
+            {
+                success: false,
+                message: "Post no encontrado"
+            }
+        ) 
+        }
+
+        res.status(500).json(
+            {
+                success: true,
+                message: "Post encontrado con succeso",
+                data: listPost
+            }
+        )
+    } catch (error) {
+        res.status(500).json(
+            {
+                success: false,
+                message: "Error en listar los posts"
+            }
+        )
+    }
+}
+
 export {
     crearPost, EliminarPostPorId, actualizarPostPorId,
-    listarMisPosts, listarPosts
+    listarMisPosts, listarPosts, listarPostPorId
 }
