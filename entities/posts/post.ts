@@ -264,7 +264,52 @@ const listarPostPorId = async (req: Request, res: Response) => {
     }
 }
 
+///////////////////////////          MÉTODO RECUPERAR POSTS DE UN USUARIO POR ID      /////////////////////////////
+const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+        const idUserEnPost = req.params.id;
+
+        const IdUser = await UserModel.findOne(
+            { _id: idUserEnPost }
+        )
+
+        const encontrarUserIdEnPost = await PostModel.findOne(
+            { id: IdUser?.id}
+        )
+
+        if( encontrarUserIdEnPost?.id !== IdUser?.id ){
+            return res.status(404).json(
+                {
+                    success: false,
+                    message: "Usuario no tine posts"
+                }
+            )
+        }
+
+        const encontrarUserIdEnPosts = await PostModel.find(
+            { id: IdUser?.id}
+        )
+        return res.status(200).json(
+            {
+                success: true,
+                message: "Posts encontrado con succeso",
+                data: encontrarUserIdEnPosts
+            }
+        )
+    } catch (error) {
+        return res.status(500).json(
+            {
+                success: false,
+                message: "Error en buscar posts"
+            }
+        )
+    }
+}
+
+
 export {
     crearPost, EliminarPostPorId, actualizarPostPorId,
-    listarMisPosts, listarPosts, listarPostPorId
+    listarMisPosts, listarPosts, listarPostPorId,
+    recuperarPostDeUnUsuarioPorId
 }
