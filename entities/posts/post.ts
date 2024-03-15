@@ -313,7 +313,6 @@ const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
     }
 }
 
-
 export {
     crearPost, EliminarPostPorId, actualizarPostPorId,
     listarMisPosts, listarPosts, listarPostPorId,

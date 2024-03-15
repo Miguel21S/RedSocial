@@ -42,7 +42,8 @@ export const crearComentario = async (req: Request, res: Response) => {
         return res.status(200).json(
             {
                 success: true,
-                message: "Post creado con succeso"
+                message: "Post creado con succeso",
+                data: comentarPost
             }
         )
     } catch (error) {
