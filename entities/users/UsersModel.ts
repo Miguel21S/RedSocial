@@ -11,10 +11,9 @@ interface User extends Document {
     role?: Role;
     seguidores?: Schema.Types.ObjectId;
     siguiendo?: Schema.Types.ObjectId[];
-    post?: Schema.Types.ObjectId;
 }
 
-const UserSchema = new Schema <User>(
+const UserSchema = new Schema<User>(
     {
         name: {
             type: String,
@@ -49,14 +48,7 @@ const UserSchema = new Schema <User>(
                 type: Schema.Types.ObjectId,
                 ref: "UserModel"
             }
-        ],
-
-        post: [  // IDs de publicaciones hechas por este usuario
-            {
-                type: Schema.Types.ObjectId,
-                ref: "PostModel"
-            }
-        ]
+            ],
     },
     {
         timestamps: true,

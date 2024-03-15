@@ -9,7 +9,7 @@ const crearPost = async (req: Request, res: Response) => {
         const { title, contenido } = req.body;
 
         const user = await UserModel.findOne({ _id: userId })
-
+    
         const publicarPost = await PostModel.create(
             {
                 title,
@@ -18,7 +18,7 @@ const crearPost = async (req: Request, res: Response) => {
                 name: user?.name
             },
         )
-
+       
         res.status(200).json(
             {
                 success: true,
@@ -270,12 +270,18 @@ const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
         const userId = req.tokenData.usuarioId;
         const idUserEnPost = req.params.id;
 
-        const IdUser = await UserModel.findOne(
-            { _id: idUserEnPost }
-        )
+        const IdUser = await UserModel.findById( idUserEnPost )
+        if(!IdUser){
+            return res.status(404).json(
+                {
+                    success: false,
+                    message: "Usuario no encontrado"
+                }
+            )
+        }
 
         const encontrarUserIdEnPost = await PostModel.findOne(
-            { id: IdUser?.id}
+            { id: IdUser?.id }
         )
 
         if( encontrarUserIdEnPost?.id !== IdUser?.id ){
