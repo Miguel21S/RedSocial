@@ -14,8 +14,8 @@ const crearPost = async (req: Request, res: Response) => {
             {
                 title,
                 contenido,
-                id: user?.id,
-                name: user?.name
+                userIdPost: user?.id,
+                userName: user?.name
             },
         )
        
