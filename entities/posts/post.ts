@@ -106,17 +106,9 @@ const actualizarPostPorId = async (req: Request, res: Response) => {
         const postId = req.params.id;
         const { title, contenido } = req.body
 
-        const user = await UserModel.findOne(
-            {
-                _id: userId
-            }
-        )
+        const user = await UserModel.findOne( { _id: userId } )
 
-        const encontartPostId = await PostModel.findOne(
-            {
-                _id: postId
-            }
-        )
+        const encontartPostId = await PostModel.findOne( { _id: postId } )
 
         if (!encontartPostId) {
             return res.status(404).json(
@@ -127,11 +119,7 @@ const actualizarPostPorId = async (req: Request, res: Response) => {
             )
         }
 
-        const userIdEnPost = await PostModel.findOne(
-            {
-                userIdPost: encontartPostId?.id
-            }
-        )
+        const userIdEnPost = await PostModel.findOne( { userIdPost: encontartPostId?.id } )
 
         if (userIdEnPost?.id !== user?.id) {
             return res.status(404).json(

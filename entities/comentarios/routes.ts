@@ -6,6 +6,7 @@ import { auth } from "../../core/middlewares/auth";
 
 const router = Router();
 router.post('/comments', auth, comentarios.crearComentario)
-router.delete('/remove/:id', auth, comentarios.eliminarComentario);
+router.put('/comments/:id', auth, comentarios.editarComentario);
+router.delete('/comments/:id', auth, comentarios.eliminarComentario);
 
 export default router;

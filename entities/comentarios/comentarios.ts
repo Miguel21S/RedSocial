@@ -56,6 +56,67 @@ const crearComentario = async (req: Request, res: Response) => {
     }
 }
 
+const editarComentario = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+        const {comentario} = req.body;
+        const comentarioId = req.params.id;
+
+        const user = await UserModel.findOne({ _id: userId });
+
+        const encontrarcomentario = await ComentarioModel.findOne({ _id: comentarioId });
+        if (!encontrarcomentario) {
+            return res.status(404).json(
+                {
+                    success: false,
+                    message: "Comentario no encontrado"
+                }
+            )
+        }
+
+        const donoComentario = await ComentarioModel.findOne(
+            {
+                userIdComentario: user?.id
+            }
+        );
+
+        if (!donoComentario) {
+            return res.status(404).json(
+                {
+                    success: false,
+                    message: "No tienes permisión para editar post"
+                }
+            )
+        }
+
+        const comentarioEditar = await ComentarioModel.findByIdAndUpdate(
+            {
+                _id: comentarioId
+            },
+            {
+                comentario: comentario
+            },
+            {
+                new: true
+            }
+        );
+        return res.status(200).json(
+            {
+                success: true,
+                message: "Comentario editado con succeso",
+                data: comentarioEditar
+            }
+        )
+    } catch (error) {
+        return res.status(500).json(
+            {
+                success: true,
+                message: "Error en editar comentario"
+            }
+        )
+    }
+}
+
 const eliminarComentario = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
@@ -72,9 +133,9 @@ const eliminarComentario = async (req: Request, res: Response) => {
                 }
             )
         }
-        
+
         const donoPostId = await ComentarioModel.findOne({ userIdPost: user?.id })
-        
+
         const donoIdUserComentario = await ComentarioModel.findOne(
             {
                 userIdComentario: user?.id,
@@ -82,7 +143,7 @@ const eliminarComentario = async (req: Request, res: Response) => {
 
             }
         )
-        
+
         if (!donoPostId && !donoIdUserComentario) {
             return res.status(404).json(
                 {
@@ -92,7 +153,7 @@ const eliminarComentario = async (req: Request, res: Response) => {
             )
         }
 
-        const comentarioEliminar = await ComentarioModel.findByIdAndDelete( comentarioId );
+        const comentarioEliminar = await ComentarioModel.findByIdAndDelete(comentarioId);
         return res.status(200).json(
             {
                 success: true,
@@ -112,5 +173,5 @@ const eliminarComentario = async (req: Request, res: Response) => {
 }
 
 export {
-    crearComentario, eliminarComentario
+    crearComentario, editarComentario, eliminarComentario 
 }
