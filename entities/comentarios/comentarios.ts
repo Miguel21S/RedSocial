@@ -4,7 +4,7 @@ import ComentarioModel from "./ComentariosModel";
 import UserModel from "../users/UsersModel";
 import PostModel from "../posts/PostsModel";
 
-export const crearComentario = async (req: Request, res: Response) => {
+const crearComentario = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
         const { comentario, postId } = req.body;
@@ -19,8 +19,8 @@ export const crearComentario = async (req: Request, res: Response) => {
             )
         }
 
-        const idPost = await PostModel.findOne({ _id: postId });
-        if (!idPost) {
+        const idPosts = await PostModel.findOne({ _id: postId });
+        if (!idPosts) {
             return res.status(404).json(
                 {
                     success: false,
@@ -32,8 +32,8 @@ export const crearComentario = async (req: Request, res: Response) => {
         const comentarPost = await ComentarioModel.create(
             {
                 comentario,
-                postID: postId,
-                postId: idPost?._id,
+                idPost: idPosts?._id,
+                userIdPost: idPosts?.userIdPost,
                 userIdComentario: user?.id,
                 userName: user.name
             }
@@ -54,4 +54,63 @@ export const crearComentario = async (req: Request, res: Response) => {
             }
         )
     }
+}
+
+const eliminarComentario = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+        const idComentario = req.params.id;
+
+        const user = await UserModel.findOne({ _id: userId });
+
+        const comentarioId = await ComentarioModel.findOne({ _id: idComentario });
+        if (!comentarioId) {
+            return res.status(404).json(
+                {
+                    success: false,
+                    message: "Comentario no encontrado"
+                }
+            )
+        }
+        
+        const donoPostId = await ComentarioModel.findOne({ userIdPost: user?.id })
+        
+        const donoIdUserComentario = await ComentarioModel.findOne(
+            {
+                userIdComentario: user?.id,
+                _id: comentarioId
+
+            }
+        )
+        
+        if (!donoPostId && !donoIdUserComentario) {
+            return res.status(404).json(
+                {
+                    success: false,
+                    message: "No tienes permisión para eliminar el post"
+                }
+            )
+        }
+
+        const comentarioEliminar = await ComentarioModel.findByIdAndDelete( comentarioId );
+        return res.status(200).json(
+            {
+                success: true,
+                message: "Comentario eliminado con succeso",
+                data: comentarioEliminar
+            }
+        )
+
+    } catch (error) {
+        res.status(500).json(
+            {
+                success: false,
+                message: "Error al intentar eliminar comentario"
+            }
+        )
+    }
+}
+
+export {
+    crearComentario, eliminarComentario
 }

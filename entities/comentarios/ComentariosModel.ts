@@ -2,7 +2,8 @@
 import { Schema, model, Document } from "mongoose";
 
 interface Comentario extends Document {
-    postId: Schema.Types.ObjectId;
+    idPost: Schema.Types.ObjectId;
+    userIdPost: Schema.Types.ObjectId;
     userIdComentario: Schema.Types.ObjectId;
     userName: String;
     comentario: String;
@@ -10,7 +11,13 @@ interface Comentario extends Document {
 
 const comentariosSchema = new Schema<Comentario>(
     {
-        postId:
+        idPost:
+        {
+            type: Schema.Types.ObjectId,
+            ref: "PostModel"
+        },
+
+        userIdPost:
         {
             type: Schema.Types.ObjectId,
             ref: "PostModel"

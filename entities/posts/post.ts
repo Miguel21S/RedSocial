@@ -66,7 +66,7 @@ const EliminarPostPorId = async (req: Request, res: Response) => {
 
         const userIdEnPost = await PostModel.findOne(
             {
-                id: encontartPostId?.id
+                userIdPost: encontartPostId?.id
             }
         )
 
@@ -129,7 +129,7 @@ const actualizarPostPorId = async (req: Request, res: Response) => {
 
         const userIdEnPost = await PostModel.findOne(
             {
-                id: encontartPostId?.id
+                userIdPost: encontartPostId?.id
             }
         )
 
@@ -183,7 +183,7 @@ const listarMisPosts = async (req: Request, res: Response) => {
             )
 
         const userIdEnPost = await PostModel.find(
-            { id: user?.id }
+            { userIdPost: user?.id }
         )
 
         res.status(200).json(
@@ -281,7 +281,7 @@ const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
         }
 
         const encontrarUserIdEnPost = await PostModel.findOne(
-            { id: IdUser?.id }
+            { userIdPost: IdUser?.id }
         )
 
         if( encontrarUserIdEnPost?.id !== IdUser?.id ){
@@ -294,7 +294,7 @@ const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
         }
 
         const encontrarUserIdEnPosts = await PostModel.find(
-            { id: IdUser?.id}
+            { userIdPost: IdUser?.id}
         )
         return res.status(200).json(
             {
