@@ -3,7 +3,9 @@ import { Request, Response } from "express"
 import ComentarioModel from "./ComentariosModel";
 import UserModel from "../users/UsersModel";
 import PostModel from "../posts/PostsModel";
+import { Types } from "mongoose";
 
+////////////////////////// MÉTODO COMENTARIO     ////////////////////////
 const crearComentario = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
@@ -56,10 +58,56 @@ const crearComentario = async (req: Request, res: Response) => {
     }
 }
 
+////////////////////////// MÉTODO FILTRAR BUSQUEDA DE COMENTARIO     ////////////////////////
+const buscarComentario = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+        const { idComentario, idPos, userName } = req.query;
+
+        interface queryfiltrsI {
+            idComentario?: Types.ObjectId;
+            idPost?: Types.ObjectId;
+            userName?: string;
+        }
+
+        const queryfiltrs: queryfiltrsI = {}
+        if (idComentario && Types.ObjectId.isValid(idComentario as string)) {
+            queryfiltrs.idComentario = new Types.ObjectId(idComentario as string)
+        }
+
+        if (idPos && Types.ObjectId.isValid(idPos as string)) {
+            queryfiltrs.idPost = new Types.ObjectId(idPos as string);
+        }
+
+        if (userName) {
+            queryfiltrs.userName = userName as string
+        }
+
+        const mostrarIdComentario = await ComentarioModel.find(queryfiltrs)
+
+        res.status(200).json(
+            {
+                success: true,
+                message: "Datos del filtro",
+                data: mostrarIdComentario
+            }
+        )
+
+    } catch (error) {
+        res.status(500).json(
+            {
+                success: false,
+                meassage: "Error en filtrar datos"
+            }
+        )
+    }
+}
+
+////////////////////////// MÉTODO EDITAR COMENTARIO     ////////////////////////
 const editarComentario = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
-        const {comentario} = req.body;
+        const { comentario } = req.body;
         const comentarioId = req.params.id;
 
         const user = await UserModel.findOne({ _id: userId });
@@ -117,6 +165,7 @@ const editarComentario = async (req: Request, res: Response) => {
     }
 }
 
+////////////////////////// MÉTODO ELIMINAR COMENTARIO     ////////////////////////
 const eliminarComentario = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
@@ -173,5 +222,6 @@ const eliminarComentario = async (req: Request, res: Response) => {
 }
 
 export {
-    crearComentario, editarComentario, eliminarComentario 
+    crearComentario, editarComentario, eliminarComentario,
+    buscarComentario
 }

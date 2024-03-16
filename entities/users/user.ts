@@ -136,7 +136,6 @@ const filtrarPorEmail = async (req: Request, res: Response) => {
 
         interface queryfiltrsI {
             email?: string
-            name?: string
         }
 
         const queryfiltrs: queryfiltrsI = {};
