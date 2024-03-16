@@ -1,14 +1,11 @@
 
 import { Schema, model, Document, Types } from "mongoose";
 
-interface Role {
-    name: string;
-}
 interface User extends Document {
     name: string;
     email: string;
     password: string;
-    role?: Role;
+    role?: string;
     seguidores?: Schema.Types.ObjectId;
     siguiendo?: Schema.Types.ObjectId[];
 }
