@@ -33,10 +33,7 @@ const likesSchema = new Schema<Likes>(
         titlePost: String,
         userNamePost: String,
         userNameLike: String,
-        like: {
-            type: Number,
-            enum: [1, 0]
-        },
+        like: Number
     },
 
     {

@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import UserModel from "../users/UsersModel";
+import  { CustomError, ServerError } from "../Error/manejoErrores";
 
 ////////////   MÉTODO REGISTRAR USUARIO   //////////////////////////
 const registrar = async (req: Request, res: Response) => {
@@ -48,12 +49,14 @@ const registrar = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        res.status(500).json(
-            {
-                success: false,
-                message: "Error al crear usuario creado con suceso"
-            }
-        )
+        if(error instanceof CustomError){
+            error.sendResponse(res)
+
+        } else {
+
+            const serverError = new ServerError();
+            serverError.sendResponse(res)
+        }
     }
 }
 
@@ -91,7 +94,7 @@ const login = async (req: Request, res: Response) => {
         const validarPwd = bcrypt.compareSync(password, user!.password);
         
         if (!validarPwd) {
-            return res.status(404).json(
+            return res.json(
                 {
                     success: false,
                     mesage: "Password invalido"
@@ -118,11 +121,14 @@ const login = async (req: Request, res: Response) => {
             token: token,
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Error al intentar logearse",
-            error: error
-        })
+        if(error instanceof CustomError){
+            error.sendResponse(res)
+
+        } else {
+
+            const serverError = new ServerError();
+            serverError.sendResponse(res)
+        }
     }
 }
 

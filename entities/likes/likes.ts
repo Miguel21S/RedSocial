@@ -43,7 +43,6 @@ const darlikes = async (req: Request, res: Response) => {
             existLike.like = like;
             await existLike.save();
         } else {
-            // const likes = like === like ? 1 : 0;
             await LikeModel.create(
                 {
                     type: like,
@@ -57,12 +56,10 @@ const darlikes = async (req: Request, res: Response) => {
             )
         }
 
-
         res.status(200).json(
             {
                 success: true,
                 message: "Like",
-
             }
         )
     } catch (error) {
