@@ -5,6 +5,7 @@ import UserModel from "../../entities/users/UsersModel";
 
 export const isSuperAdmin = async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
+        let userRole;
         const user = await UserModel.findById(
             {
                 _id: req.tokenData.usuarioId
@@ -16,7 +17,8 @@ export const isSuperAdmin = async (req: CustomRequest, res: Response, next: Next
                 message: "Usuario no encontrado"
             });
         }
-        const userRole = user.role
+
+        userRole = user.role
         console.log(userRole)
 
         if( userRole !== "superAdmin"){

@@ -9,7 +9,8 @@ import { Types } from "mongoose";
 const crearComentario = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
-        const { comentario, postId } = req.body;
+        const postId = req.params.id;
+        const { comentario } = req.body;
 
         const user = await UserModel.findOne({ _id: userId });
         if (!user) {
@@ -22,6 +23,7 @@ const crearComentario = async (req: Request, res: Response) => {
         }
 
         const idPosts = await PostModel.findOne({ _id: postId });
+        console.log(idPosts)
         if (!idPosts) {
             return res.status(404).json(
                 {
@@ -36,8 +38,9 @@ const crearComentario = async (req: Request, res: Response) => {
                 comentario,
                 idPost: idPosts?._id,
                 userIdPost: idPosts?.userIdPost,
+                userNamePost: idPosts?.userName,
                 userIdComentario: user?.id,
-                userName: user.name
+                userNameComentario: user.name
             }
         )
 

@@ -5,7 +5,8 @@ interface Comentario extends Document {
     idPost: Schema.Types.ObjectId;
     userIdPost: Schema.Types.ObjectId;
     userIdComentario: Schema.Types.ObjectId;
-    userName: String;
+    userNamePost: string;
+    userNameComentario: String;
     comentario: String;
 }
 
@@ -29,7 +30,8 @@ const comentariosSchema = new Schema<Comentario>(
             ref: "UserModel"
         },
 
-        userName: String,
+        userNamePost: String,
+        userNameComentario: String,
         comentario: String,
     },
 

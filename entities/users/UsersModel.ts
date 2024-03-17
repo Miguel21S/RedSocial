@@ -5,7 +5,7 @@ interface User extends Document {
     name: string;
     email: string;
     password: string;
-    role?: string;
+    role: string;
     seguidores?: Schema.Types.ObjectId;
     siguiendo?: Schema.Types.ObjectId[];
 }

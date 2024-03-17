@@ -12,28 +12,18 @@ interface Post extends Document {
 }
 const PostSchema = new Schema<Post>(
     {
+        userName: String,
+        title: String,
+        contenido: String,
+        
         userIdPost:
         {
             type: Schema.Types.ObjectId,
             ref: "UserModel"
         },
 
-        userName: String,
-        title: String,
-        contenido: String,
-
-        likes:
-        {
-            type: Schema.Types.ObjectId,
-            ref: "UserModel"
-        },
-
-        // comentarios:
-        // {
-        //     type: Schema.Types.ObjectId,
-        //     ref: "ComentarioModel"
-        // },
     },
+
     {
         timestamps: true,
         versionKey: false,
