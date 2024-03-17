@@ -7,7 +7,7 @@ interface Likes extends Document {
     titlePost: string;
     userNamePost: string;
     userNameLike: string;
-    lik: number;
+    like: number;
 }
 
 const likesSchema = new Schema<Likes>(
@@ -33,7 +33,10 @@ const likesSchema = new Schema<Likes>(
         titlePost: String,
         userNamePost: String,
         userNameLike: String,
-        lik: Number,
+        like: {
+            type: Number,
+            enum: [1, 0]
+        },
     },
 
     {

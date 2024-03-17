@@ -7,6 +7,7 @@ import routerController from "../entities/controllers/routes";
 import routerUser from "../entities/users/routes";
 import routerPost from "../entities/posts/routes";
 import routerComentario from "../entities/comentarios/routes";
+import routerLike from "../entities/likes/routes";
 
 
 const app: Application = express();
@@ -17,6 +18,7 @@ app.use('/api', routerController);
 app.use('/api', routerUser);
 app.use('/api', routerPost);
 app.use('/api', routerComentario);
+app.use('/api', routerLike);
 
 dbConnection()
     .then(() => {
