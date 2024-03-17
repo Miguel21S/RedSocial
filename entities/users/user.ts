@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import UserModel from "./UsersModel";
 import bcrypt from "bcrypt";
+import { CustomError, NotFoundError, ServerError } from "../Error/manejoErrores";
 
 // import { CustomRequest } from "../../core/middlewares/auth";
 
@@ -77,12 +78,15 @@ const ListarTodosUsuarios = async (req: Request, res: Response) => {
         )
         console.log(lista)
     } catch (error) {
-        res.status(500).json(
-            {
-                success: false,
-                message: "Error en buscar lista de usuarios"
-            }
-        )
+           if( error instanceof CustomError){
+            error.sendResponse(res);
+
+           } else {
+
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+           }
+        
     }
 };
 
@@ -120,12 +124,14 @@ const actualizarUsuario = async (req: Request, res: Response) => {
         )
 
     } catch (error) {
-        res.status(200).json(
-            {
-                success: false,
-                message: "Error en actualizado los datos"
-            }
-        )
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+            
+        }
     }
 }
 
@@ -151,11 +157,14 @@ const filtrarPorEmail = async (req: Request, res: Response) => {
             data: getEmail
         })
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Error al buscar usuario",
-            error: error
-        })
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+            
+        }
     }
 }
 
@@ -171,12 +180,7 @@ const EliminarPorId = async (req: Request, res: Response) => {
         )
 
         if(!confirmar){
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "Usuario no existe en el sistema"
-                }
-            )
+            throw new NotFoundError( 'No se encontraron datos en la solicitud' );
         }
         const deleteUser = await UserModel.findByIdAndDelete(userId)
 
@@ -187,12 +191,14 @@ const EliminarPorId = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        res.status(500).json(
-            {
-                success: false,
-                message: "Error al intentar eliminar usuario"
-            }
-        )
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+            
+        }
     }
 }
 
@@ -215,10 +221,7 @@ const actualizarRolePorId = async (req: Request, res: Response) => {
         )
 
         if (!updateRole) {
-            return res.status(404).json({
-                success: false,
-                message: "Usuario no encontrado"
-            });
+            throw new NotFoundError( 'No se encontraron datos en la solicitud' )
         }
 
         res.status(200).json({
@@ -226,10 +229,14 @@ const actualizarRolePorId = async (req: Request, res: Response) => {
             message: "Role actualizado con éxito"
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Error al actualizar Role"
-        });
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+            
+        }
     }
 }
 
