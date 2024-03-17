@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import PostModel from "./PostsModel";
 import UserModel from "../users/UsersModel";
+import { CustomError, ForbiddenError, NotFoundError, ServerError } from "../Error/manejoErrores";
 
 ///////////////////////////          MÉTODO CREAR POST           /////////////////////////////////////
 const crearPost = async (req: Request, res: Response) => {
@@ -28,12 +29,13 @@ const crearPost = async (req: Request, res: Response) => {
         )
 
     } catch (error) {
-        res.status(500).json(
-            {
-                success: false,
-                message: "Error al crear post"
-            }
-        )
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
     }
 }
 
@@ -43,25 +45,12 @@ const EliminarPostPorId = async (req: Request, res: Response) => {
         const userId = req.tokenData.usuarioId;
         const postId = req.params.id;
 
-        const user = await UserModel.findOne(
-            {
-                _id: userId
-            }
-        )
+        const user = await UserModel.findOne( { _id: userId } )
 
-        const encontartPostId = await PostModel.findOne(
-            {
-                _id: postId
-            }
-        )
+        const encontartPostId = await PostModel.findOne( { _id: postId } )
 
         if (!encontartPostId) {
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "Post no encontrado"
-                }
-            )
+            throw new NotFoundError( 'No se encontraron datos en la solicitud' );
         }
 
         const userIdEnPost = await PostModel.findOne(
@@ -71,12 +60,7 @@ const EliminarPostPorId = async (req: Request, res: Response) => {
         )
 
         if (userIdEnPost?.id !== user?.id) {
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "Usuario no tienes permiso para eliminar Post"
-                }
-            )
+            throw new ForbiddenError( 'Usuario no permitido' )
 
         }
 
@@ -89,12 +73,13 @@ const EliminarPostPorId = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        res.status(500).json(
-            {
-                success: false,
-                message: "Error al intentar eliminar el post"
-            }
-        )
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
     }
 
 }
@@ -111,36 +96,24 @@ const actualizarPostPorId = async (req: Request, res: Response) => {
         const encontartPostId = await PostModel.findOne( { _id: postId } )
 
         if (!encontartPostId) {
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "Post no encontrado"
-                }
-            )
+            throw new NotFoundError( 'No se encontraron datos en la solicitud' );
         }
 
         const userIdEnPost = await PostModel.findOne( { userIdPost: encontartPostId?.id } )
 
         if (userIdEnPost?.id !== user?.id) {
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "Usuario no tienes permiso para editar Post"
-                }
-            )
+            throw new ForbiddenError( 'Usuario no permitido' )
         }
 
         const updatePost = await PostModel.findByIdAndUpdate(
-            {
-                _id: postId
-            },
+            {  _id: postId },
+            
             {
                 title: title,
                 contenido: contenido
             },
-            {
-                new: true
-            }
+
+            { new: true }
         )
 
         res.status(200).json(
@@ -151,12 +124,13 @@ const actualizarPostPorId = async (req: Request, res: Response) => {
         )
 
     } catch (error) {
-        res.status(500).json(
-            {
-                success: false,
-                message: "Error al intentar actualizar el post"
-            }
-        )
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
     }
 }
 
@@ -182,12 +156,13 @@ const listarMisPosts = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        res.status(500).json(
-            {
-                success: true,
-                message: "Error en listar tus posts",
-            }
-        )
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
     }
 }
 
@@ -206,12 +181,13 @@ const listarPosts = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        res.status(500).json(
-            {
-                success: false,
-                message: "Error en listar los posts"
-            }
-        )
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
     }
 }
 
@@ -227,15 +203,10 @@ const listarPostPorId = async (req: Request, res: Response) => {
         )
 
         if(!listPost){
-           return res.status(404).json(
-            {
-                success: false,
-                message: "Post no encontrado"
-            }
-        ) 
+            throw new NotFoundError( 'No se encontraron datos en la solicitud' );
         }
 
-        res.status(500).json(
+        res.status(200).json(
             {
                 success: true,
                 message: "Post encontrado con succeso",
@@ -243,12 +214,13 @@ const listarPostPorId = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        res.status(500).json(
-            {
-                success: false,
-                message: "Error en listar los posts"
-            }
-        )
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
     }
 }
 
@@ -260,12 +232,7 @@ const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
 
         const IdUser = await UserModel.findById( idUserEnPost )
         if(!IdUser){
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "Usuario no encontrado"
-                }
-            )
+             throw new NotFoundError( 'No se encontraron datos en la solicitud' );
         }
 
         const encontrarUserIdEnPost = await PostModel.findOne(
@@ -273,7 +240,7 @@ const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
         )
 
         if( encontrarUserIdEnPost?.id !== IdUser?.id ){
-            return res.status(404).json(
+            return res.json(
                 {
                     success: false,
                     message: "Usuario no tine posts"
@@ -292,12 +259,13 @@ const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        return res.status(500).json(
-            {
-                success: false,
-                message: "Error en buscar posts"
-            }
-        )
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
     }
 }
 
