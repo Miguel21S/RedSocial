@@ -4,6 +4,7 @@ import ComentarioModel from "./ComentariosModel";
 import UserModel from "../users/UsersModel";
 import PostModel from "../posts/PostsModel";
 import { Types } from "mongoose";
+import { CustomError, ForbiddenError, NotFoundError, ServerError } from "../Error/manejoErrores";
 
 ////////////////////////// MÉTODO COMENTARIO     ////////////////////////
 const crearComentario = async (req: Request, res: Response) => {
@@ -14,23 +15,12 @@ const crearComentario = async (req: Request, res: Response) => {
 
         const user = await UserModel.findOne({ _id: userId });
         if (!user) {
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "Usuario no encontrado"
-                }
-            )
+            throw new NotFoundError(' No se encontraron datos de usuario en la solicitud ');
         }
 
         const idPosts = await PostModel.findOne({ _id: postId });
-        console.log(idPosts)
         if (!idPosts) {
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "Post no encontrado"
-                }
-            )
+            throw new NotFoundError(' No se encontraron datos del post en la solicitud ');
         }
 
         const comentarPost = await ComentarioModel.create(
@@ -52,12 +42,13 @@ const crearComentario = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        res.status(500).json(
-            {
-                success: false,
-                message: "Error en encontar el post"
-            }
-        )
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+            
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
     }
 }
 
@@ -97,12 +88,13 @@ const buscarComentario = async (req: Request, res: Response) => {
         )
 
     } catch (error) {
-        res.status(500).json(
-            {
-                success: false,
-                meassage: "Error en filtrar datos"
-            }
-        )
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+            
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
     }
 }
 
@@ -117,12 +109,7 @@ const editarComentario = async (req: Request, res: Response) => {
 
         const encontrarcomentario = await ComentarioModel.findOne({ _id: comentarioId });
         if (!encontrarcomentario) {
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "Comentario no encontrado"
-                }
-            )
+            throw new NotFoundError('No se encontraron datos del comentario en la solicitud');
         }
 
         const donoComentario = await ComentarioModel.findOne(
@@ -132,24 +119,15 @@ const editarComentario = async (req: Request, res: Response) => {
         );
 
         if (!donoComentario) {
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "No tienes permisión para editar post"
-                }
-            )
+            throw new NotFoundError('No se encontraron datos de usuario en la solicitud');
         }
 
         const comentarioEditar = await ComentarioModel.findByIdAndUpdate(
-            {
-                _id: comentarioId
-            },
-            {
-                comentario: comentario
-            },
-            {
-                new: true
-            }
+            { _id: comentarioId },
+
+            { comentario: comentario },
+
+            { new: true }
         );
         return res.status(200).json(
             {
@@ -159,12 +137,13 @@ const editarComentario = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        return res.status(500).json(
-            {
-                success: true,
-                message: "Error en editar comentario"
-            }
-        )
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+            
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
     }
 }
 
@@ -178,12 +157,7 @@ const eliminarComentario = async (req: Request, res: Response) => {
 
         const comentarioId = await ComentarioModel.findOne({ _id: idComentario });
         if (!comentarioId) {
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "Comentario no encontrado"
-                }
-            )
+            throw new NotFoundError('No se encontraron datos del comentario en la solicitud');
         }
 
         const donoPostId = await ComentarioModel.findOne({ userIdPost: user?.id })
@@ -197,12 +171,7 @@ const eliminarComentario = async (req: Request, res: Response) => {
         )
 
         if (!donoPostId && !donoIdUserComentario) {
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "No tienes permisión para eliminar el post"
-                }
-            )
+            throw new ForbiddenError( 'Usuario no permitido' )
         }
 
         const comentarioEliminar = await ComentarioModel.findByIdAndDelete(comentarioId);
@@ -215,12 +184,13 @@ const eliminarComentario = async (req: Request, res: Response) => {
         )
 
     } catch (error) {
-        res.status(500).json(
-            {
-                success: false,
-                message: "Error al intentar eliminar comentario"
-            }
-        )
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+            
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
     }
 }
 
