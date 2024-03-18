@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import UserModel from "../users/UsersModel";
 import PostModel from "../posts/PostsModel";
 import LikeModel from "./LikesModel";
+import { CustomError, NotFoundError, ServerError } from "../Error/manejoErrores";
 
 
 const darlikes = async (req: Request, res: Response) => {
@@ -13,22 +14,12 @@ const darlikes = async (req: Request, res: Response) => {
 
         const user = await UserModel.findOne({ _id: userId });
         if (!user) {
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "Usuario no encontrado"
-                }
-            )
+            throw new NotFoundError(' No se encontraron datos de usuario en la solicitud ');
         }
 
         const post = await PostModel.findOne({ _id: postId });
         if (!post) {
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "Post no encontrado"
-                }
-            )
+            throw new NotFoundError(' No se encontraron datos del en la solicitud ');
         }
 
         const existLike = await LikeModel.findOne(
@@ -39,10 +30,13 @@ const darlikes = async (req: Request, res: Response) => {
         )
 
         if (existLike) {
+
             like = existLike.like === 1 ? 0 : 1;
             existLike.like = like;
             await existLike.save();
+
         } else {
+
             await LikeModel.create(
                 {
                     type: like,
@@ -63,12 +57,14 @@ const darlikes = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        res.status(500).json(
-            {
-                success: true,
-                message: "Error al dar el like"
-            }
-        )
+        if( error instanceof CustomError ){
+            error.sendResponse(res);
+
+        } else {
+            
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
     }
 }
 

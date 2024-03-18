@@ -151,7 +151,7 @@ const listarMisPosts = async (req: Request, res: Response) => {
         res.status(200).json(
             {
                 success: true,
-                message: "Tus lista de posts",
+                message: "Lista de posts",
                 data: userIdEnPost
             }
         )
@@ -203,7 +203,7 @@ const listarPostPorId = async (req: Request, res: Response) => {
         )
 
         if(!listPost){
-            throw new NotFoundError( 'No se encontraron datos en la solicitud' );
+            throw new NotFoundError( 'No se encontraron datos de la lista en la solicitud' );
         }
 
         res.status(200).json(
@@ -232,7 +232,7 @@ const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
 
         const IdUser = await UserModel.findById( idUserEnPost )
         if(!IdUser){
-             throw new NotFoundError( 'No se encontraron datos en la solicitud' );
+             throw new NotFoundError( 'No se encontraron datos de usuario en la solicitud' );
         }
 
         const encontrarUserIdEnPost = await PostModel.findOne(
