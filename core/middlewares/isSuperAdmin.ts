@@ -2,6 +2,7 @@
 import { NextFunction, Request, Response } from "express";
 import { CustomRequest } from "../../core/middlewares/auth"
 import UserModel from "../../entities/users/UsersModel";
+import { NotFoundError, UnauthorizedError } from "../../entities/Error/manejoErrores";
 
 export const isSuperAdmin = async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
@@ -12,20 +13,15 @@ export const isSuperAdmin = async (req: CustomRequest, res: Response, next: Next
             }
         )
         if (!user) {
-            return res.status(401).json({
-                success: false,
-                message: "Usuario no encontrado"
-            });
+            throw new NotFoundError('No se encontraron datos de usuario en la solicitud');
+
         }
 
         userRole = user.role
         console.log(userRole)
 
         if( userRole !== "superAdmin"){
-            return res.status(401).json({
-                success: false,
-                message: "No authorizado"
-            })
+            throw new UnauthorizedError( 'Usuario no autorizado' )
         }
         next();
     } catch (error) {
