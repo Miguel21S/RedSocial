@@ -36,10 +36,10 @@ const darlikes = async (req: Request, res: Response) => {
             await existLike.save();
 
         } else {
-
+            
             await LikeModel.create(
                 {
-                    type: like,
+                    like: like,
                     idPost: post?._id,
                     userIdPost: post?.userIdPost,
                     userIdLike: user?._id,

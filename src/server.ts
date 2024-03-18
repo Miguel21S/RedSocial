@@ -2,12 +2,13 @@
 import express, { Application } from "express";
 import bodyParser from "body-parser";
 import "dotenv/config";
-import { dbConnection } from "../core/database/db";
-import routerController from "../entities/controllers/routes";
-import routerUser from "../entities/users/routes";
-import routerPost from "../entities/posts/routes";
-import routerComentario from "../entities/comentarios/routes";
-import routerLike from "../entities/likes/routes";
+import { dbConnection } from "./core/database/db";
+import routerController from "./entities/controllers/routes";
+import routerUser from "./entities/users/routes";
+import routerPost from "./entities/posts/routes";
+import routerComentario from "./entities/comentarios/routes";
+import routerLike from "./entities/likes/routes";
+import routerSeguirSiguiendo from "./entities/seguidoreSeguidos/routes"
 
 
 const app: Application = express();
@@ -19,6 +20,7 @@ app.use('/api', routerUser);
 app.use('/api', routerPost);
 app.use('/api', routerComentario);
 app.use('/api', routerLike);
+app.use('/api', routerSeguirSiguiendo);
 
 dbConnection()
     .then(() => {

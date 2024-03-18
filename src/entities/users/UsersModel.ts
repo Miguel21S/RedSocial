@@ -33,19 +33,7 @@ const UserSchema = new Schema<User>(
             enum: ["user", "admin", "superAdmin"],
             default: "user",
         },
-        seguidores: [  // IDs de usuarios que siguen a este usuario
-            {
-                type: Schema.Types.ObjectId,
-                ref: "UserModel"
-            }
-        ],
 
-        siguiendo:   // IDs de usuarios que este usuario sigue
-            [{
-                type: Schema.Types.ObjectId,
-                ref: "UserModel"
-            }
-            ],
     },
     {
         timestamps: true,
