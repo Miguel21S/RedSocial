@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import UserModel from "../users/UsersModel";
 import PostModel from "../posts/PostsModel";
 import LikeModel from "./LikesModel";
-import { CustomError, NotFoundError, ServerError } from "../Error/manejoErrores";
+import { CustomError, NotFoundError, ServerError } from "../../core/utils/manejoErrores";
 
 
 const darlikes = async (req: Request, res: Response) => {

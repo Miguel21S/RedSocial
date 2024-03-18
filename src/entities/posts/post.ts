@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import PostModel from "./PostsModel";
 import UserModel from "../users/UsersModel";
-import { CustomError, ForbiddenError, NotFoundError, ServerError } from "../Error/manejoErrores";
+import { CustomError, ForbiddenError, NotFoundError, ServerError } from "../../core/utils/manejoErrores";
 
 ///////////////////////////          MÉTODO CREAR POST           /////////////////////////////////////
 const crearPost = async (req: Request, res: Response) => {

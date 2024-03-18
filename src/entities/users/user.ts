@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 import UserModel from "./UsersModel";
 import bcrypt from "bcrypt";
-import { CustomError, NotFoundError, ServerError } from "../Error/manejoErrores";
+import { CustomError, NotFoundError, ServerError } from "../../core/utils/manejoErrores";
 
 // import { CustomRequest } from "../../core/middlewares/auth";
 
@@ -76,7 +76,7 @@ const ListarTodosUsuarios = async (req: Request, res: Response) => {
                 data: lista
             }
         )
-        console.log(lista)
+   
     } catch (error) {
            if( error instanceof CustomError){
             error.sendResponse(res);

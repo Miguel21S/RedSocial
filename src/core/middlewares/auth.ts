@@ -3,7 +3,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { TokenData } from "../../types";
-import { CustomError, ServerError, UnauthorizedError } from "../../entities/Error/manejoErrores";
+import { CustomError, ServerError, UnauthorizedError } from "../utils/manejoErrores";
 
 export interface CustomRequest extends Request {
     tokenData: TokenData;

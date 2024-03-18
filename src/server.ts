@@ -2,7 +2,7 @@
 import express, { Application } from "express";
 import bodyParser from "body-parser";
 import "dotenv/config";
-import { dbConnection } from "../entities/database/db";
+import { dbConnection } from "../core/database/db";
 import routerController from "../entities/controllers/routes";
 import routerUser from "../entities/users/routes";
 import routerPost from "../entities/posts/routes";

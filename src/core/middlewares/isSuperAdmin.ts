@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from "express";
 import { CustomRequest } from "../../core/middlewares/auth"
 import UserModel from "../../entities/users/UsersModel";
-import { NotFoundError, UnauthorizedError } from "../../entities/Error/manejoErrores";
+import { CustomError, NotFoundError, ServerError, UnauthorizedError } from "../utils/manejoErrores";
 
 export const isSuperAdmin = async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
@@ -18,16 +18,18 @@ export const isSuperAdmin = async (req: CustomRequest, res: Response, next: Next
         }
 
         userRole = user.role
-        console.log(userRole)
-
         if( userRole !== "superAdmin"){
             throw new UnauthorizedError( 'Usuario no autorizado' )
         }
         next();
     } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: "No tienes permiso"
-        })
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+            
+        }
     }
 }

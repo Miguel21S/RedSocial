@@ -4,7 +4,7 @@ import ComentarioModel from "./ComentariosModel";
 import UserModel from "../users/UsersModel";
 import PostModel from "../posts/PostsModel";
 import { Types } from "mongoose";
-import { CustomError, ForbiddenError, NotFoundError, ServerError } from "../Error/manejoErrores";
+import { CustomError, ForbiddenError, NotFoundError, ServerError } from "../../core/utils/manejoErrores";
 
 ////////////////////////// MÉTODO COMENTARIO     ////////////////////////
 const crearComentario = async (req: Request, res: Response) => {
