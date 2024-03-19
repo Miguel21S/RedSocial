@@ -79,6 +79,9 @@ const seguirUser = async (req: Request, res: Response) => {
 const verMisSeguidores = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
+        let limit = Number(req.query.limit) || 10
+        const page = Number(req.query.page) || 1
+        const skip = (page - 1) * limit
 
         const user = await UserModel.findOne({ _id: userId });
         if (!user) {
@@ -87,6 +90,8 @@ const verMisSeguidores = async (req: Request, res: Response) => {
 
         const misSeguidores = await SeguidoresSeguidosModel.find( { idUserSiguiendo: userId, estadoSeguiendo: 1 } )
         .select("NameUser")
+        .limit(limit)
+        .skip(skip)
 
         res.status(200).json({
             success: true,
@@ -108,6 +113,9 @@ const verMisSeguidores = async (req: Request, res: Response) => {
 const losSiguidos = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
+        let limit = Number(req.query.limit) || 10
+        const page = Number(req.query.page) || 1
+        const skip = (page - 1) * limit
 
         const user = await UserModel.findOne({ _id: userId });
         if (!user) {
@@ -116,6 +124,8 @@ const losSiguidos = async (req: Request, res: Response) => {
 
         const siguiendo = await SeguidoresSeguidosModel.find({ idUser: userId, estadoSeguiendo: 1 })
         .select("NameUserSiguiendo")
+        .limit(limit)
+        .skip(skip)
        
         res.status(200).json({
             success: true,

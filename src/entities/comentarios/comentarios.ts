@@ -57,6 +57,9 @@ const buscarComentario = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
         const { idComentario, idPos, userName } = req.query;
+        let limit = Number(req.query.limit) || 10
+        const page = Number(req.query.page) || 1
+        const skip = (page - 1) * limit
 
         interface queryfiltrsI {
             idComentario?: Types.ObjectId;
@@ -78,6 +81,8 @@ const buscarComentario = async (req: Request, res: Response) => {
         }
 
         const mostrarIdComentario = await ComentarioModel.find(queryfiltrs)
+        .limit(limit)
+        .skip(skip)
 
         res.status(200).json(
             {
