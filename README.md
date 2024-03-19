@@ -859,7 +859,18 @@ app.listen(PORT, () => {
 
 ```
 ---
-<img src= "https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" href="leaismiguelss@gmail.com" alt ="G-MAIL">
+Para el deployed se hizo la utilidad del cloud de MongoDB Atlas para la gestion de la base de datos en la nube como se puede ver en la siguiente imagen
+ https://www.mongodb.com/es/atlas/database
+
+<img src="./src/img/mongoAtlas.png">
+
+Para el despliegue del proyecto se utilizo la app del flo 
+https://www.fl0.com/
+
+<img src="./src/img/flo.png">
+
+---
+<img src= "https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt ="G-MAIL">
 
 ## Autor:
 
