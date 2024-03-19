@@ -22,6 +22,10 @@ app.use('/api', routerComentario);
 app.use('/api', routerLike);
 app.use('/api', routerSeguirSiguiendo);
 
+app.get("/api/healthy", (req, res) => {
+    res.status(200).json({ success: true, message: "server is healthy" })
+  })
+
 dbConnection()
     .then(() => {
         console.log('Database connected');
