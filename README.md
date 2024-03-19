@@ -859,10 +859,8 @@ app.listen(PORT, () => {
 
 ```
 ---
-<img src= "https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt ="G-MAIL">
+<img src= "https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" href="leaismiguelss@gmail.com" alt ="G-MAIL">
 
 ## Autor:
 
 Name: Miguel Bengui
-
-Email: leaismiguelss@gmail.com
