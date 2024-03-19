@@ -1,7 +1,7 @@
 
 
 <ul>
-<li> <a href="#rede-social">Rede Social</a> </li>
+<li> <a href="#red-social">Red Social</a> </li>
 
 <li><a href="#tecnologías">Tecnologías</a> </li>
 
