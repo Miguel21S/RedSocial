@@ -5,7 +5,7 @@ import { auth } from "../../core/middlewares/auth";
 
 const router = Router();
 
-router.post('/post', auth, posts.crearPost);
+router.post('/posts', auth, posts.crearPost);
 router.delete('/posts/:id', auth, posts.EliminarPostPorId);
 router.put('/posts/:id', auth, posts.actualizarPostPorId);
 router.get('/posts/own', auth, posts.listarMisPosts);

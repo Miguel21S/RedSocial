@@ -12,10 +12,18 @@ const registrar = async (req: Request, res: Response) => {
         const email = req.body.email;
         const password = req.body.password;
 
-        if ((password.length < 8) || (password.length > 15)) {
+        const validPwd = /^(?=.*\d)(?=.*[!\"#\$%&'()*+,-./:;<=>?@[\\\]^_])(?=.*[A-Z])(?=.*[a-z])\S{8,}$/
+        if(password.length < 8){
             return res.status(404).json({
                 success: false,
-                message: "La contraseña debe ser mayor de 8 caracteres y menor o igual a 15"
+                message: "La contraseña debe más de 8 caracteres"
+            })
+        }
+
+        if (!validPwd.test(password)) {
+            return res.status(404).json({
+                success: false,
+                message: "La contraseña debe tener al menos un dígito, un carácter especia, una letra mayúscula, una letra minúscula, y que no tenga espacio."
             })
         }
 

@@ -269,6 +269,15 @@ const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
     }
 }
 
+const postSeguidores = async ( req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+        
+    } catch (error) {
+        
+    }
+}
+
 export {
     crearPost, EliminarPostPorId, actualizarPostPorId,
     listarMisPosts, listarPosts, listarPostPorId,

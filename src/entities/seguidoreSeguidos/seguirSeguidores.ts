@@ -82,10 +82,10 @@ const verMisSeguidores = async (req: Request, res: Response) => {
 
         const user = await UserModel.findOne({ _id: userId });
         if (!user) {
-            throw new NotFoundError('No se encontraron datos del usuario en la solicitud');
+            throw new NotFoundError( 'No se encontraron datos del usuario en la solicitud' );
         }
 
-        const misSeguidores = await SeguidoresSeguidosModel.find({ idUserSiguiendo: userId, estadoSeguiendo: 1 })
+        const misSeguidores = await SeguidoresSeguidosModel.find( { idUserSiguiendo: userId, estadoSeguiendo: 1 } )
         .select("NameUser")
 
         res.status(200).json({
@@ -105,7 +105,7 @@ const verMisSeguidores = async (req: Request, res: Response) => {
 }
 
 ///////////////////////////           MÉTODO SEGUIR QUE LISTA DOTOS LOS USUARIOS QUE SIGO      /////////////////////////////////////
-const losSiguiendos = async (req: Request, res: Response) => {
+const losSiguidos = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
 
@@ -134,5 +134,5 @@ const losSiguiendos = async (req: Request, res: Response) => {
 }
 
 export {
-    seguirUser, verMisSeguidores, losSiguiendos
+    seguirUser, verMisSeguidores, losSiguidos
 }

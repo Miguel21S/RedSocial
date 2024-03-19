@@ -4,8 +4,8 @@ import * as seguirSiguiendo from "./seguirSeguidores";
 import { auth } from "../../core/middlewares/auth";
 
 const router = Router();
-router.post('/users/seguir/:id', auth, seguirSiguiendo.seguirUser);
-router.get('/users/seguidores', auth, seguirSiguiendo.verMisSeguidores);
-router.get('/users/siguiendo', auth, seguirSiguiendo.losSiguiendos);
+router.post('/users/follow/:id', auth, seguirSiguiendo.seguirUser);
+router.get('/users/following', auth, seguirSiguiendo.verMisSeguidores);
+router.get('/users/followers', auth, seguirSiguiendo.losSiguidos);
 
 export default router;
