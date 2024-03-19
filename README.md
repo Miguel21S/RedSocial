@@ -5,33 +5,31 @@
 ---
 
 <ul>
-<li> <a href="#red-social">Red Social</a> </li>
+<li> <a href="#red-social">Social Network</a> </li>
 
-<li><a href="#tecnologías">Tecnologías</a> </li>
+<li><a href="#tecnologías">Technologies</a> </li>
 
-<li> <a href="#descripción">Descripción</a> </li>
+<li> <a href="#estructura-y-diseño-de-la-base-de-datos">Database structure and design</a> </li>
 
-<li> <a href="#estructura-y-diseño-de-la-base-de-datos">Estructura y diseño de la base de datos</a> </li>
+<li> <a href="#estado-del-proyecto">Status of the Projectol</a> </li>
 
-<li> <a href="#estado-del-proyecto">Estado del Proyectol</a> </li>
+<li> <a href="#descripción-de-las-tecnologías">Description of technologies</a> </li>
 
-<li> <a href="#descripción-de-las-tecnologías">Descripción de las tecnologías</a> </li>
+<li> <a href="#puesta-en-marcha-del-proyecto">Project Start-up</a> </li>
 
-<li> <a href="#puesta-en-marcha-del-proyecto">Puesta en Marcha del Proyecto</a> </li>
-
-<li> <a href="#autor">Autor</a> </li>
+<li> <a href="#autor">Author</a> </li>
 
 </ul>
 
 ---
 
-# Red Social
+# Social Network
 
-En este repositorio se van a crear un sistema CRUD completo de endpoints de una Red Social, para esto se necesita cumplir con los endpoints descripto en los requisitos adquiridos para el sistema.
+In this repository we are going to create a complete CRUD system of endpoints of a Social Network, for this we need to comply with the endpoints described in the requirements acquired for the system..
 
 ---
 
-## Tecnologías
+## Technologies
 
 
 <img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"
@@ -50,76 +48,76 @@ alt="TypeScript" />
 <img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white" alt="NPM">
 
 ---
-## Descripción
+## Description
 
-El proyeto consiste en desarrollar una red social en las que se puede registrarse, accerder a la red e interactuar, con los demás usuarios del sistema.
+The project consists of developing a social network in which you can register, access the network and interact with other users of the system..
 
-## Requisitos funcionales
+## Database structure and design
 
-Desarrolar una red social en la que los usuarios se registrarán, logearán y publicarán. Además los usuarios podrán gestionar las funcionalidades como gustar y dejar de gustar a una publicación, gestionar los comentarios, y seguir y dejar de seguir a un usuario.
+Develop a social network where users will register, log in and post. In addition, users will be able to manage functionalities such as liking and unliking a post, managing comments, and following and unfollowing a user.
 
-Para estes requisitos se necesitarán como minimo las colecciones:
+For these requirements you will need at least the collections:
 
-- usuario
+- users
 - posts
-- comentarios
+- comments
 - likes
-- seguidores
+- followers
 
 Endpoints:
 
-Autenticación
+Authentication
 
-| Método | URI | Acción |
+| Method | URI | Action |
 | --- | --- | --- |
-| POST | /api/auth/register | Registro de usuarios |
-| POST | /api/auth/login | Login de usuarios |
+| POST | /api/auth/register | User registration |
+| POST | /api/auth/login | User login |
 
-Usuarios
+users
 
-| Método | URI | Acción |
+| Method | URI | Action |
 | --- | --- | --- |
-| GET | /api/users | Ver todos los usuarios (super_admin) |
-| GET | /api/users/profile | Ver perfil de usuario |
+| GET | /api/users | View user profile (super_admin) |
+| GET | /api/users/profile | Modify profile data |
 | PUT | /api/users/profile | Modificar datos del perfil |
-| GET | /api/users?email=ejemplo@ejemplo.com | Filtrar usuario por email (super_admin) |
-| DELETE | /api/users/{id} | Eliminar usuario (super_admin) |
-| PUT | /api/users/{id}/role | Cambio de role (super_admin) |
+| GET | /api/users?email=ejemplo@ejemplo.com | Filter user by email (super_admin) |
+| DELETE | /api/users/{id} | Delete user (super_admin) |
+| PUT | /api/users/{id}/role | Change role (super_admin) |
 
 Posts
 
-| Método | URI | Acción |
+| Method | URI | Action |
 | --- | --- | --- |
-| POST | /api/posts | Crear post |
-| DELETE | /api/posts/{id} | Eliminar Post por id |
-| PUT | /api/posts | Actualizar post por id |
-| GET | /api/posts/own | Recuperar mis propios posts |
-| GET | /api/posts | Recuperar todos los posts |
-| GET | /api/posts/{id} | Recuperar post por id |
-| GET | /api/Recuperar/{user-id} | Recuperar posts de un usuario |
+| POST | /api/posts | Create post |
+| DELETE | /api/posts/{id} | Delete Post by id |
+| PUT | /api/posts | Update post by id |
+| GET | /api/posts/own | Retrieve my own posts  |
+| GET | /api/posts | Retrieve all posts |
+| GET | /api/posts/{id} | Retrieve post by id |
+| GET | /api/Recuperar/{user-id} | Retrieve a user's posts |
 
-Comentarios
+comments
 
-| Método | URI | Acción |
+| Method | URI | Action |
 | --- | --- | --- |
-| POST | /comments/{id} | Crear un comentario |
-| PUT |/comments/{id} | Actualizar un comentario por id  |
-| GET | /comments/filters | Filtrar comentario  |
-| DELETE | /comments/{id} | Eliminar un comentario por id  |
+| POST | /comments/{id} | Create a comment  |
+| PUT |/comments/{id} | Update a comment by id  |
+| GET | /comments/filters | Filter comment  |
+| DELETE | /comments/{id} | Delete a comment by id |
 
 Likes
 
-| Método | URI | Acción |
+| Method | URI | Action |
 | --- | --- | --- |
-| PUT | /api/posts/like/{id} | Dar y quitar like |
+| PUT | /api/posts/like/{id} | Like and unlike |
 
-Seguir
+followers
 
-| Método | URI | Acción |
+| Method | URI | Action |
 | --- | --- | --- |
-| POST | /api/users/follow/{id} | Seguir y dejar de seguir un usuario |
-| GET | /users/following | Listar mis seguidores  |
-| GET | /users/followers | Listar usuarios que sigo  |
+| POST | /api/users/follow/{id} | Follow and unfollow a user |
+| GET | /users/following | List my followers  |
+| GET | /users/followers | List users I follow  |
 
 Otros aspectos requeridos:
 
@@ -127,13 +125,13 @@ Otros aspectos requeridos:
 - Midllewares para comprobar la autoía del post a la hora de editar/eliminar el mismo.
 - Deploy a producción del código banckend
 
-## Estructura y diseño de la base de datos
+## Database structure and design
 
-En seguida se mustrarán la imagen del modelado de base de datos y la construcción de algunas tablas
+The image of the database modeling and the construction of some tables will be illustrated below.
 
 <img src="./src/img/mongoose.png">
 
-El código que se muestra a continuación es del UserModel
+The code shown below is from the UserModel
 
 ```tsx
 import { Schema, model, Document, Types } from "mongoose";
@@ -183,7 +181,7 @@ const UserModel = model<User>("User", UserSchema);
 export default UserModel;
 ```
 
-A continuación se muestra la construcción del LikesModel
+The construction of the LikesModel is shown below.
 ```tsx
 import { Document, Schema, model } from "mongoose"
 
@@ -233,49 +231,32 @@ const LikeModel = model<Likes>("Likes", likesSchema);
 export default LikeModel;
 ```
 
-La base de datos consta de cinco tablas:
+The database consists of five tables:
+- The UsersModel table
+- The PostsModel table that references the Users table
+- The CommentsModel table that references the UsersModel table
+- The LikesModel table that references the PostsModel and UsersModel models
+- The table FollowersFollowersModel that makes reference to UsersModel
 
-- La tabla UsersModel
-- La tabla PostsModel que hace referencia en la tabla Usuarios
-- La tabla ComentariosModel que hace referencia a la tabla Usuarios
-- La tabla LikesModel que hace referencia a los modelos de PostsModel y UsersModel
-- La tabla SeguidoresSeguidosModel que hace referencia a UsersModel
+## Status of the Projectol
 
-## Estado del Proyecto
+The project is concluded, since it meets all the requirements acquired for the system provided, which is the creation of a Social Network on behalf of the bankend.
 
-El proyecto se encuentra concluido, ya que cumple con todos los requisitos adquirido para el sistema propocionado, que es la creación de una Red Social de parte del bankend.
+for the execution of the project in local install some dependencies of the technologies used in the project, as well as:
 
-## Para el funcionamieto en entorno local
-Se necesita seguir los siguientes pasos:
-
-Clonar repositorio
+Clone repository
 
 ```
-$ git clone https://github.com/Miguel21S/BackeEndTatu.git
-```
-Instalar la dependencia
-```
-$ npm install
-```
-Para crear las migraciones
-```
-$ npm run ....
-```
-Para rellenar las tablas de base de datos
-```
-$ npm run seeders ....
-```
-Para la inicialización de la app
-```
-npm run dev
+$ git clone https://github.com/Miguel21S/RedSocial.git
 ```
 
-## Puesta en Marcha del Proyecto
-Para el correcto funcionamiento del proyecto, se desarrollará varias clases, que se ilustrarán con ejemplos de código.
 
-Los siguientes métodos son de los midleware.
+## Project Start-up
+For the correct functioning of the project, several classes will be developed, which will be illustrated with code examples.
 
-El siguiente método comprueba si el usuario tiene un token de acceso o no almacenado en la variable token un valor de cabezera y de autorización.
+The following methods are from the midleware.
+
+The following method checks whether the user has an access token or not by storing a header and authorization value in the token variable.
 
 ```tsx
 import { NextFunction, Request, Response } from "express";
@@ -313,7 +294,7 @@ export const auth = async (req: CustomRequest, res: Response, next: NextFunction
 
 ```
 
-Este método comprueba si el usuario es un super admin del sistema, ya que el super admin tiene ciertos privilegios en el sistema.
+This method checks if the user is a super admin of the system, since the super admin has certain privileges in the system.
 
 ```tsx
 
@@ -353,7 +334,7 @@ export const isSuperAdmin = async (req: CustomRequest, res: Response, next: Next
 }
 ```
 
-El siguiente código es del método `registrar`
+The following code is from the method `registrar`
 
 ```tsx
 import { Request, Response } from "express";
@@ -423,15 +404,15 @@ const registrar = async (req: Request, res: Response) => {
 }
 ```
 
-Al desarrollar este código, se incorporaron algunas validaciones esenciales para cumplir con los requisitos mínimos de un sistema de `registro`. Estos incluyen la validación de formato de un correo electrónico, contraseña y la encriptación de la contraseña.
+In developing this code, some essential validations were incorporated to meet the minimum requirements of a `registration` system. These include validation of an email format, password and password encryption.
 
-La siguiente imagen muestra el registro de un usuario en el sistema.
+The following image shows the registration of a user in the system.
 
 <img src="./src/img/1.png">
 
 <img src="./src/img/1_2.png">
 
-Las siguientes líneas de código explican claramente cómo se creó el método de inicio de sesión y las validaciones que se implementarán. Además, se describe la funcionalidad para la creación del token de acceso, garantizando que solo los usuarios registrados puedan acceder al sistema.
+The following lines of code clearly explain how the login method was created and the validations that will be implemented. In addition, the functionality for the creation of the access token is described, ensuring that only registered users can access the system.
 
 ```tsx
 const login = async (req: Request, res: Response) => {
@@ -503,12 +484,13 @@ const login = async (req: Request, res: Response) => {
     }
 }
 ```
-En la imagen de que se muestra a continuación se muestra que el usuario se ha logeado con sucesso y que ha recibido un token de acceso
+The image below shows that the user has successfully logged in and received an access token.
+
 <img src="./src/img/2.png">
 
-Las siguientes lineas se mostrarán algunos códigos de diferentes endpoints con diferentes funcionalidades.
+The following lines will show some codes of different endpoints with different functionalities.
 
-El siguiente método se define los números de elementos a mostrar en cada pagina, y el limite de elementos establecido por el usuario. El método consiste en visualizar todos los usuarios del sistema.
+The following method defines the number of elements to be displayed on each page, and the limit of elements set by the user. The method consists of displaying all the users of the system.
 
 ```tsx
 const ListarTodosUsuarios = async (req: Request, res: Response) => {
@@ -544,11 +526,11 @@ const ListarTodosUsuarios = async (req: Request, res: Response) => {
 };
 ```
 
-En las siguientes imagen se muestra la visualizacion de usuarios del sistemas en una escala de 1 a 5 por paginas. Super Admin accediendo la visualización de los usuarios ya que es el único que tiene permisión para visualizar todos los usuarios del sistema
+The following image shows the visualization of the system users in a scale of 1 to 5 per page. Super Admin accessing the visualization of the users since he is the only one that has permission to visualize all the users of the system.
 
 <img src="./src/img/3.png">
 
-El siguiente método filtra busqueda de un comentario por Id del comentario, post, y nombre del usuario. Para este método se creo una interface y un objecto vacio de tipo queryFiltersI, y se comprueba su busqueda mediante método `find()`.
+The following method filters a comment search by comment ID, post, and user name. For this method we create an interface and an empty object of type queryFiltersI, and we check its search by using method `find()`.
 
 ```tsx
 const buscarComentario = async (req: Request, res: Response) => {
@@ -602,13 +584,13 @@ const buscarComentario = async (req: Request, res: Response) => {
 }
 ```
 
-La siguiente imagen muestra el resultado de la busqueda.
+The following image shows the result of the search.
 
 <img src="./src/img/4.png">
 
 <img src="./src/img/4_1.png">
 
-El siguiente método tiene la funcionalidad de actualizar role de un usuario en sistema.
+The following method has the functionality to update a user's role in the system.
 
 ```tsx
 const actualizarRolePorId = async (req: Request, res: Response) => {
@@ -649,11 +631,11 @@ const actualizarRolePorId = async (req: Request, res: Response) => {
 }
 ```
 
-En la siguiente imagen se puede ver como se ha actualizado el role de usuario.
+In the following image you can see how the user role has been updated.
 
 <img src="./src/img/5.png">
 
-El siguiente método tiene la funcionalidad de elimina un comentario
+The following method has the functionality to delete a comment
 
 ```tsx
 const eliminarComentario = async (req: Request, res: Response) => {
@@ -703,11 +685,12 @@ const eliminarComentario = async (req: Request, res: Response) => {
 }
 ```
 
-En la siguiente imagen se puede visualizar que se ha eliminado el comentario.
+In the following image you can see that the comment has been deleted.
 
 <img src="./src/img/6.png">
 
-El código que se muestra a continuación sirve para dar y quitar like a un post, en esté método despues de eliminar el like no se quita el registro en la base de datos
+The following code is used to give and remove likes to a post, in this method after removing the like the record is not removed from the database.
+
 ```tsx
 const darlikes = async (req: Request, res: Response) => {
     try {
@@ -772,13 +755,13 @@ const darlikes = async (req: Request, res: Response) => {
 }
 ```
 
-Se puede visualizar la información del usuario que el like se ha almacenado o enviado, en la siguiente imagen.
+You can visualize the user information that the like has been stored or sent, in the following image.
 
 <img src="./src/img/7.png">
 
 <img src="./src/img/7_1.png">
 
-El siguiente método muetra una lista de sus seguidores.
+The following method displays a list of your followers.
 
 ```tsx
 const listarMisSeguidores = async (req: Request, res: Response) => {
@@ -815,11 +798,11 @@ const listarMisSeguidores = async (req: Request, res: Response) => {
 }
 ```
 
-Se puede visualizar la buscada de seguidores en la siguiente imagen.
+You can visualize the search of followers in the following image.
 
 <img src="./src/img/8.png">
 
-En esta clase `server.ts` es la clase principal del programa
+In this class `server.ts` is the main class of the program.
 
 ```tsx
 import express, { Application } from "express";
@@ -859,12 +842,13 @@ app.listen(PORT, () => {
 
 ```
 ---
-Para el deployed se hizo la utilidad del cloud de MongoDB Atlas para la gestion de la base de datos en la nube como se puede ver en la siguiente imagen
+For the deployed was made the utility of MongoDB Atlas cloud for the management of the database in the cloud as you can see in the following image.
+ 
  https://www.mongodb.com/es/atlas/database
 
 <img src="./src/img/mongoAtlas.png">
 
-Para el despliegue del proyecto se utilizo la app del flo 
+For the deployment of the project, the flo app was used.
 https://www.fl0.com/
 
 <img src="./src/img/flo.png">
@@ -872,6 +856,6 @@ https://www.fl0.com/
 ---
 <img src= "https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt ="G-MAIL">
 
-## Autor:
+## Author:
 
 Name: Miguel Bengui
