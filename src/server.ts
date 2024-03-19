@@ -1,6 +1,6 @@
 
 import express, { Application } from "express";
-import bodyParser from "body-parser";
+// import bodyParser from "body-parser";
 import "dotenv/config";
 import { dbConnection } from "./core/database/db";
 import routerController from "./entities/controllers/routes";
