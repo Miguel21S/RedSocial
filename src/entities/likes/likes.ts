@@ -19,7 +19,7 @@ const darlikes = async (req: Request, res: Response) => {
 
         const post = await PostModel.findOne({ _id: postId });
         if (!post) {
-            throw new NotFoundError(' No se encontraron datos del en la solicitud ');
+            throw new NotFoundError(' No se encontraron datos de usuario en la solicitud ');
         }
 
         const existLike = await LikeModel.findOne(

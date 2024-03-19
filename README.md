@@ -249,7 +249,11 @@ Clone repository
 ```
 $ git clone https://github.com/Miguel21S/RedSocial.git
 ```
+For the execution of seeders 
 
+```
+$ npm run seeders
+```
 
 ## Project Start-up
 For the correct functioning of the project, several classes will be developed, which will be illustrated with code examples.

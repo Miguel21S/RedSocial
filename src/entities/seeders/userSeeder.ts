@@ -1,46 +1,112 @@
 
-// import UserModel from "../users/UsersModel";
-// import bcrypt from 'bcrypt';
-// import {dbConnection} from '../../core/database/db';
+import mongoose from "mongoose"
+import { faker } from "@faker-js/faker"
+import User from "../users/UsersModel"
+import Post from "../posts/PostsModel"
+import Like from "../likes/LikesModel";
+import Comentario from "../comentarios/ComentariosModel";
+import SeguidoresSeguidos from "../seguidoreSeguidos/seguidoresSeguidosModel";
+import "dotenv/config"
+import { dbConnection } from "../../core/database/db"
+import bcrypt from "bcrypt"
 
-// const seedUsers = async () => {
-//         const usersData = [
-//             { name: "John", email: "john@example.com", password: "joh112323", role_id: 1 },
-//             { name: "Elena", email: "elena@example.com", password: "elena123", role_id: 1 },
-//             { name: "Carlos", email: "carlos@example.com", password: "carlos456", role_id: 2 },
-//             { name: "Laura", email: "laura@example.com", password: "laura789", role_id: 1 },
-//             { name: "Juan", email: "juan@example.com", password: "juan987", role_id: 1 },
-//             { name: "María", email: "maria@example.com", password: "maria654", role_id: 1 },
-//             { name: "Pedro", email: "pedro@example.com", password: "pedro321", role_id: 1 },
-//             { name: "Ana", email: "ana@example.com", password: "ana246", role_id: 1 },
-//             { name: "David", email: "david@example.com", password: "david135", role_id: 1 },
-//             { name: "Sara", email: "sara@example.com", password: "sara579", role_id: 1 },
-//             { name: "Mario", email: "mario@example.com", password: "mario753", role_id: 1 },
-//             { name: "Jane", email: "jane@example.com", password: "password2", role_id: 2 },
-//             { name: "Helena", email: "helena@example.com", password: "password3", role_id: 3 }
-//         ];
+dbConnection()
 
-//         const hashedUsers = usersData.map(userData => ({
-//             ...userData,
-//             password: bcrypt.hashSync(userData.password, 10),
-//             role: userData.role_id === 1 ? "user" : userData.role_id === 2 ? "admin" : "superAdmin"
-//         }));
-//         return hashedUsers;
-//     };  
-//     const userDatabase = async () => {   
-//         try {
-//             (await dbConnection()).Connection;
-//             const users = seedUsers();
-//             await UserModel.insertMany(users);
-//         console.log('---------------------------');
-//         console.log('Los usuarios se han guardado correctamente');
-//         console.log('---------------------------');
-//     } catch (error) {
-//         console.error(error);
-//     }
-//     finally {
-//         (await dbConnection()).disconnect;
-//     }
+const createSeedData = async () => {
+    try {
+        // Eliminar datos existentes
+        await User.deleteMany({});
+        await Post.deleteMany({});
+        await Like.deleteMany({});
+        await Comentario.deleteMany({});
+        await SeguidoresSeguidos.deleteMany({});
 
-//     };
-//     userDatabase();
+        // Crear un super_admin
+        const superAdmin = new User({
+            name: "super Admin",
+            email: "superadmin@superadmin.com",
+            password: bcrypt.hashSync("Super123456789.", 8),
+            role: "superAdmin",
+        });
+        await superAdmin.save();
+
+        // Crear 20 usuarios y recoger sus IDs
+        let userIds = []; // Inicializar el arreglo de userIds
+        for (let i = 0; i < 20; i++) {
+            const user = new User({
+                name: faker.internet.userName(),
+                email: faker.internet.email(),
+                password: bcrypt.hashSync("User123456789.", 8),
+            });
+            await user.save();
+            userIds.push(user._id); // Añadir el ID del usuario recién creado al arreglo de userIds
+
+            // Para cada usuario, crear 10 posts
+            for (let j = 0; j < 10; j++) {
+                const post = new Post({
+                    userName: user.name,
+                    title: faker.lorem.sentence(),
+                    contenido: faker.lorem.paragraphs(),
+                    userIdPost: user._id,
+                });
+                await post.save();
+
+                // Crear likes para cada post
+                for (let k = 0; k < Math.floor(Math.random() * 10); k++) {
+                    const randomUserIndex = Math.floor(Math.random() * userIds.length);
+                    const userDoc = await User.findById(userIds[randomUserIndex]).lean();
+                    const userNameLike = userDoc ? userDoc.name as string : ''; // Asignación de tipo para userNameLike
+                    const like = new Like({
+                        idPost: post._id,
+                        userIdPost: user._id,
+                        userIdLike: userIds[randomUserIndex],
+                        titlePost: post.title,
+                        userNamePost: user.name,
+                        userNameLike,
+                        like: 1,
+                    });
+                    await like.save();
+                }
+
+                // Crear comentarios para cada post
+                for (let l = 0; l < Math.floor(Math.random() * 5); l++) {
+                    const randomUserIndex = Math.floor(Math.random() * userIds.length);
+                    const userDoc = await User.findById(userIds[randomUserIndex]).lean();
+                    const userNameComentario = userDoc ? userDoc.name as string : ''; // Asignación de tipo para userNameComentario
+                    const comentario = new Comentario({
+                        idPost: post._id,
+                        userIdPost: user._id,
+                        userIdComentario: userIds[randomUserIndex],
+                        userNamePost: user.name,
+                        userNameComentario,
+                        comentario: faker.lorem.sentence(),
+                    });
+                    await comentario.save();
+                }
+
+                // Crear relaciones de seguimiento
+                const randomFollowingUsers = userIds.slice(0, Math.floor(Math.random() * 10));
+                for (const followingUserId of randomFollowingUsers) {
+                    const userDoc = await User.findById(followingUserId).lean();
+                    const NameUserSiguiendo = userDoc ? userDoc.name as string : ''; // Asignación de tipo para NameUserSiguiendo
+                    const seguidorSeguido = new SeguidoresSeguidos({
+                        idUserSiguiendo: followingUserId,
+                        idUser: user._id,
+                        NameUserSiguiendo,
+                        NameUser: user.name,
+                        estadoSeguiendo: 1,
+                    });
+                    await seguidorSeguido.save();
+                }
+            }
+        }
+
+        console.log("Seeder completado exitosamente");
+    } catch (error) {
+        console.error("Error al generar datos de prueba:", error);
+    } finally {
+        mongoose.connection.close();
+    }
+};
+
+createSeedData();
