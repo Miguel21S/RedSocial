@@ -32,12 +32,12 @@ const seguirUser = async (req: Request, res: Response) => {
 
         const yaSuigues = await SeguidoresSeguidosModel.findOne(
             {
-                IdUser: user?._id,
+                idUser: user?._id,
                 idUserSiguiendo: userSeguiendo?._id,
 
             }
         )
-
+console.log(yaSuigues)
         if (yaSuigues) {
             estadoSeguiendo = yaSuigues.estadoSeguiendo === 1 ? 0 : 1;
             yaSuigues.estadoSeguiendo = estadoSeguiendo;
@@ -50,7 +50,7 @@ const seguirUser = async (req: Request, res: Response) => {
                     estadoSeguiendo: estadoSeguiendo,
                     idUserSiguiendo: userSeguiendo?._id,
                     NameUserSiguiendo: userSeguiendo?.name,
-                    IdUser: user?._id,
+                    idUser: user?._id,
                     NameUser: user?.name
                 }
             );
@@ -83,13 +83,15 @@ const verMisSeguidores = async (req: Request, res: Response) => {
             throw new NotFoundError('No se encontraron datos del usuario en la solicitud');
         }
 
-        const misSeguidores = await SeguidoresSeguidosModel.find({ idUserSiguiendo: userId });
+        const misSeguidores = await SeguidoresSeguidosModel.find({ idUserSiguiendo: userId })
+        .select("NameUser")
 
         res.status(200).json({
             success: true,
             message: "Lista de seguidores",
             data: misSeguidores
         });
+        
     } catch (error) {
         if (error instanceof CustomError) {
             error.sendResponse(res);
@@ -100,7 +102,34 @@ const verMisSeguidores = async (req: Request, res: Response) => {
     }
 }
 
+const losSiguiendos = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+
+        const user = await UserModel.findOne({ _id: userId });
+        if (!user) {
+            throw new NotFoundError('No se encontraron datos del usuario en la solicitud');
+        }
+
+        const siguiendo = await SeguidoresSeguidosModel.find({ idUser: userId })
+        .select("NameUserSiguiendo")
+       
+        res.status(200).json({
+            success: true,
+            message: "Lista de siguiendo",
+            data: siguiendo
+        });
+
+    } catch (error) {
+        if (error instanceof CustomError) {
+            error.sendResponse(res);
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
+    }
+}
 
 export {
-    seguirUser, verMisSeguidores
+    seguirUser, verMisSeguidores, losSiguiendos
 }
