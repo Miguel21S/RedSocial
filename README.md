@@ -1,4 +1,8 @@
 
+<img src="./src/img/pri.jpeg">
+
+
+---
 
 <ul>
 <li> <a href="#red-social">Red Social</a> </li>
@@ -19,9 +23,13 @@
 
 </ul>
 
-# Rede Social
+---
 
-En este repositorio se van a crear un sistema CRUD completo de endpoints de una Rede Social, para esto se necesita cumplir con los endpoints descripto en los requisitos adquiridos para el sistema.
+# Red Social
+
+En este repositorio se van a crear un sistema CRUD completo de endpoints de una Red Social, para esto se necesita cumplir con los endpoints descripto en los requisitos adquiridos para el sistema.
+
+---
 
 ## Tecnologías
 
@@ -41,9 +49,10 @@ alt="TypeScript" />
 <img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white" alt="POSTMAN" />
 <img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white" alt="NPM">
 
+---
 ## Descripción
 
-El proyeto consiste en desarrollar una rede social en las que se puede registrarse, accerder a la red e interactuar, con los demás usuarios del sistema.
+El proyeto consiste en desarrollar una red social en las que se puede registrarse, accerder a la red e interactuar, con los demás usuarios del sistema.
 
 ## Requisitos funcionales
 
@@ -234,7 +243,7 @@ La base de datos consta de cinco tablas:
 
 ## Estado del Proyecto
 
-El proyecto se encuentra concluido, ya que cumple con todos los requisitos adquirido para el sistema propocionado, que es la creación de una rede social de parte del bankend.
+El proyecto se encuentra concluido, ya que cumple con todos los requisitos adquirido para el sistema propocionado, que es la creación de una Red Social de parte del bankend.
 
 ## Para el funcionamieto en entorno local
 Se necesita seguir los siguientes pasos:
@@ -849,6 +858,8 @@ app.listen(PORT, () => {
 });
 
 ```
+---
+<img src= "https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt ="G-MAIL">
 
 ## Autor:
 

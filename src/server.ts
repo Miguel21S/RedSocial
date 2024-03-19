@@ -10,6 +10,8 @@ import routerComentario from "./entities/comentarios/routes";
 import routerLike from "./entities/likes/routes";
 import routerSeguirSiguiendo from "./entities/seguidoreSeguidos/routes"
 
+import * as controller from "./entities/controllers/authControllers";
+
 
 const app: Application = express();
 const PORT = process.env.PORT || 4998;
@@ -21,6 +23,8 @@ app.use('/api', routerPost);
 app.use('/api', routerComentario);
 app.use('/api', routerLike);
 app.use('/api', routerSeguirSiguiendo);
+
+app.post('/auth/register', controller.registrar);
 
 app.get("/api/healthy", (req, res) => {
     res.status(200).json({ success: true, message: "server is healthy" })
