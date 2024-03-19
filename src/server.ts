@@ -12,7 +12,7 @@ import routerSeguirSiguiendo from "./entities/seguidoreSeguidos/routes"
 
 const app: Application = express();
 const PORT = process.env.PORT || 4998;
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use('/api', routerController);
 app.use('/api', routerUser);
