@@ -4,6 +4,7 @@ import UserModel from "../users/UsersModel";
 import SeguidoresSeguidosModel from "./seguidoresSeguidosModel";
 import { CustomError, NotFoundError, ServerError } from "../../core/utils/manejoErrores";
 
+///////////////////////////           MÉTODO SEGUIR Y DEJAR DE SEGUIR      /////////////////////////////////////
 const seguirUser = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
@@ -37,7 +38,7 @@ const seguirUser = async (req: Request, res: Response) => {
 
             }
         )
-console.log(yaSuigues)
+
         if (yaSuigues) {
             estadoSeguiendo = yaSuigues.estadoSeguiendo === 1 ? 0 : 1;
             yaSuigues.estadoSeguiendo = estadoSeguiendo;
@@ -74,6 +75,7 @@ console.log(yaSuigues)
     }
 }
 
+///////////////////////////           MÉTODO QUE LISTA TODOS MIS SEGUIDORES      /////////////////////////////////////
 const verMisSeguidores = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
@@ -83,7 +85,7 @@ const verMisSeguidores = async (req: Request, res: Response) => {
             throw new NotFoundError('No se encontraron datos del usuario en la solicitud');
         }
 
-        const misSeguidores = await SeguidoresSeguidosModel.find({ idUserSiguiendo: userId })
+        const misSeguidores = await SeguidoresSeguidosModel.find({ idUserSiguiendo: userId, estadoSeguiendo: 1 })
         .select("NameUser")
 
         res.status(200).json({
@@ -91,7 +93,7 @@ const verMisSeguidores = async (req: Request, res: Response) => {
             message: "Lista de seguidores",
             data: misSeguidores
         });
-        
+
     } catch (error) {
         if (error instanceof CustomError) {
             error.sendResponse(res);
@@ -102,6 +104,7 @@ const verMisSeguidores = async (req: Request, res: Response) => {
     }
 }
 
+///////////////////////////           MÉTODO SEGUIR QUE LISTA DOTOS LOS USUARIOS QUE SIGO      /////////////////////////////////////
 const losSiguiendos = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
@@ -111,7 +114,7 @@ const losSiguiendos = async (req: Request, res: Response) => {
             throw new NotFoundError('No se encontraron datos del usuario en la solicitud');
         }
 
-        const siguiendo = await SeguidoresSeguidosModel.find({ idUser: userId })
+        const siguiendo = await SeguidoresSeguidosModel.find({ idUser: userId, estadoSeguiendo: 1 })
         .select("NameUserSiguiendo")
        
         res.status(200).json({

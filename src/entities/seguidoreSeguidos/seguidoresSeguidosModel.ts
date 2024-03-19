@@ -1,4 +1,4 @@
-import { timeStamp } from "console";
+
 import { Document, Schema, model } from "mongoose";
 
 interface SeguidoresSeguidos extends Document {

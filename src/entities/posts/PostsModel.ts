@@ -1,7 +1,6 @@
 
 import { Document, ObjectId, Schema, model } from "mongoose";
 
-
 interface Post extends Document {
     userIdPost: Schema.Types.ObjectId;
     userName: string;
