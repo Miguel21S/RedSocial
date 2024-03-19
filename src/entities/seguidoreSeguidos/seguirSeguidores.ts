@@ -7,21 +7,21 @@ import { CustomError, NotFoundError, ServerError } from "../../core/utils/manejo
 const seguirUser = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
-        const idUserSiguiendo  = req.params.id;
+        const idUserSiguiendo = req.params.id;
         let estadoSeguiendo = 1;
 
         const user = await UserModel.findOne({ _id: userId });
-        if(!user?._id){
-            throw new NotFoundError( 'No se encontraron datos del usuario en la solicitud' );
-        }
-        
-        const userSeguiendo = await UserModel.findOne({ _id: idUserSiguiendo });
-        
-        if(!userSeguiendo?._id){
-            throw new NotFoundError( 'No se encontraron datos del usuario a seguir en la solicitud' );
+        if (!user?._id) {
+            throw new NotFoundError('No se encontraron datos del usuario en la solicitud');
         }
 
-        if(user?._id.equals(userSeguiendo?._id)){
+        const userSeguiendo = await UserModel.findOne({ _id: idUserSiguiendo });
+
+        if (!userSeguiendo?._id) {
+            throw new NotFoundError('No se encontraron datos del usuario a seguir en la solicitud');
+        }
+
+        if (user?._id.equals(userSeguiendo?._id)) {
             return res.json(
                 {
                     success: false,
@@ -34,11 +34,11 @@ const seguirUser = async (req: Request, res: Response) => {
             {
                 IdUser: user?._id,
                 idUserSiguiendo: userSeguiendo?._id,
-                
+
             }
         )
 
-        if(yaSuigues){
+        if (yaSuigues) {
             estadoSeguiendo = yaSuigues.estadoSeguiendo === 1 ? 0 : 1;
             yaSuigues.estadoSeguiendo = estadoSeguiendo;
             await yaSuigues.save();
@@ -63,7 +63,7 @@ const seguirUser = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        if( error instanceof CustomError ){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
 
         } else {
@@ -74,6 +74,40 @@ const seguirUser = async (req: Request, res: Response) => {
     }
 }
 
-export{
-    seguirUser
+const verMisSeguidores = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+
+        const user = await UserModel.findOne( { _id: userId } )
+        if(!user?._id){
+            throw new NotFoundError('No se encontraron datos del usuario a seguir en la solicitud');
+        }
+        
+        const miSeguidores = await SeguidoresSeguidosModel.find(
+            {
+                idUserSiguiendo: user?._id
+            }
+        ). select("NameUser")
+     
+        res.status(200).json(
+            {
+                success: false,
+                message: "Lista de seguidores",
+                data: miSeguidores
+            }
+        )
+    } catch (error) {
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
+
+    }
+}
+
+export {
+    seguirUser, verMisSeguidores
 }
