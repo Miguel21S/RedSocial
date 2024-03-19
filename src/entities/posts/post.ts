@@ -39,51 +39,6 @@ const crearPost = async (req: Request, res: Response) => {
     }
 }
 
-///////////////////////////          MÉTODO ELIMINAR POST           /////////////////////////////////////
-const EliminarPostPorId = async (req: Request, res: Response) => {
-    try {
-        const userId = req.tokenData.usuarioId;
-        const postId = req.params.id;
-
-        const user = await UserModel.findOne( { _id: userId } )
-
-        const encontartPostId = await PostModel.findOne( { _id: postId } )
-
-        if (!encontartPostId) {
-            throw new NotFoundError( 'No se encontraron datos en la solicitud' );
-        }
-
-        const userIdEnPost = await PostModel.findOne(
-            {
-                userIdPost: encontartPostId?.id
-            }
-        )
-
-        if (userIdEnPost?.id !== user?.id) {
-            throw new ForbiddenError( 'Usuario no permitido' )
-
-        }
-
-        const deletePost = await PostModel.findByIdAndDelete(postId)
-
-        res.status(200).json(
-            {
-                success: true,
-                message: "Post eliminado con suceso"
-            }
-        )
-    } catch (error) {
-        if( error instanceof CustomError){
-            error.sendResponse(res);
-
-        } else {
-            const serverError = new ServerError();
-            serverError.sendResponse(res);
-        }
-    }
-
-}
-
 ///////////////////////////          MÉTODO ACTUALIZAR POST POR ID       /////////////////////////////
 const actualizarPostPorId = async (req: Request, res: Response) => {
     try {
@@ -283,6 +238,51 @@ const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
             serverError.sendResponse(res);
         }
     }
+}
+
+///////////////////////////          MÉTODO ELIMINAR POST           /////////////////////////////////////
+const EliminarPostPorId = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+        const postId = req.params.id;
+
+        const user = await UserModel.findOne( { _id: userId } )
+
+        const encontartPostId = await PostModel.findOne( { _id: postId } )
+
+        if (!encontartPostId) {
+            throw new NotFoundError( 'No se encontraron datos en la solicitud' );
+        }
+
+        const userIdEnPost = await PostModel.findOne(
+            {
+                userIdPost: encontartPostId?.id
+            }
+        )
+
+        if (userIdEnPost?.id !== user?.id) {
+            throw new ForbiddenError( 'Usuario no permitido' )
+
+        }
+
+        const deletePost = await PostModel.findByIdAndDelete(postId)
+
+        res.status(200).json(
+            {
+                success: true,
+                message: "Post eliminado con suceso"
+            }
+        )
+    } catch (error) {
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
+    }
+
 }
 
 const postSeguidores = async ( req: Request, res: Response) => {

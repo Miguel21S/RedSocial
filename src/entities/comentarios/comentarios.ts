@@ -81,6 +81,9 @@ const buscarComentario = async (req: Request, res: Response) => {
         }
 
         const mostrarIdComentario = await ComentarioModel.find(queryfiltrs)
+        .select("userNamePost")
+        .select("userNameComentario")
+        .select("comentario")
         .limit(limit)
         .skip(skip)
 

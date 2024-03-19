@@ -76,7 +76,7 @@ const seguirUser = async (req: Request, res: Response) => {
 }
 
 ///////////////////////////           MÉTODO QUE LISTA TODOS MIS SEGUIDORES      /////////////////////////////////////
-const verMisSeguidores = async (req: Request, res: Response) => {
+const listarMisSeguidores = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
         let limit = Number(req.query.limit) || 10
@@ -144,5 +144,5 @@ const losSiguidos = async (req: Request, res: Response) => {
 }
 
 export {
-    seguirUser, verMisSeguidores, losSiguidos
+    seguirUser, listarMisSeguidores, losSiguidos
 }

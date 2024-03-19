@@ -4,64 +4,6 @@ import UserModel from "./UsersModel";
 import bcrypt from "bcrypt";
 import { CustomError, NotFoundError, ServerError } from "../../core/utils/manejoErrores";
 
-// import { CustomRequest } from "../../core/middlewares/auth";
-
-// export const addSiguiendo = async (req: CustomRequest, res: Response) => {
-//     try {
-//         const siguiendoId = req.body.suguiendoId;
-//         const userId = req.tokenData.usuarioId;
-
-//         // console.log(userId)
-
-//         const user = await UserModel.findOne(
-//             {
-//                 _id: userId,
-//                 user:{_id:siguiendoId}
-//             }
-//         )
-
-//         if (!user) {
-//             return res.status(404).json(
-//                 {
-//                     sucess: false,
-//                     message: "Usuario no encontrado"
-//                 }
-//             )
-//         }
-
-//         const seg = await UserModel.findOneAndUpdate(
-//             {
-//                 _id:userId,
-//                 user:{
-//                     _id:siguiendoId
-//                 }
-//             },
-//             {
-//                 _id:siguiendoId
-//             },
-//             {
-//                 new:true
-//             }
-//         )
-// console.log(seg)
-
-
-//         // user.siguiendo?.push(siguiendoId);
-//         // await user.save();
-
-//         res.status(200).json({
-//             success: false,
-//             message: "JWT",
-//             data: user
-//         })
-//     } catch (error) {
-//         return res.status(500).json({
-//             success: false,
-//             message: "JWT no rrrrrrrrrrrrrrr"
-//         })
-//     }
-// };
-
 /////////////////          MÉTODO LISTAR TODOS LOS USUARIOS         /////////////////////////////////
 const ListarTodosUsuarios = async (req: Request, res: Response) => {
     try {

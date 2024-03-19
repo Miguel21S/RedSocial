@@ -1,3 +1,4 @@
+
 import { Document, Schema, model } from "mongoose"
 
 interface Likes extends Document {

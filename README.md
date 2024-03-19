@@ -1,36 +1,34 @@
 
-<img src="./src/img/imagenDeTatu.png">
+
 <ul>
-<li> <a href="#gestión-de-citas-para-un-estudio-de-tatuajes">Gestión de citas para un estudio de tatuajes</a> </li>
+<li> <a href="#rede-social">Rede Social</a> </li>
 
 <li><a href="#tecnologías">Tecnologías</a> </li>
 
 <li> <a href="#descripción">Descripción</a> </li>
 
-<li><a href="#entregable-esperado">Entregable esperado</a>  </li>
+<li> <a href="#estructura-y-diseño-de-la-base-de-datos">Estructura y diseño de la base de datos</a> </li>
 
-<li> <a href="#estructura-y-diseño-de-la-base-de-datos-relacional">Estructura y diseño de la base de datos relacional</a> </li>
-
-<li> <a href="#estado-del-Proyecto">Estado del Proyectol</a> </li>
+<li> <a href="#estado-del-proyecto">Estado del Proyectol</a> </li>
 
 <li> <a href="#descripción-de-las-tecnologías">Descripción de las tecnologías</a> </li>
 
-<li> <a href="#puesta-en-Marcha-del-Proyecto">Puesta en Marcha del Proyecto</a> </li>
+<li> <a href="#puesta-en-marcha-del-proyecto">Puesta en Marcha del Proyecto</a> </li>
 
 <li> <a href="#autor">Autor</a> </li>
 
 </ul>
 
-# Gestión de citas para un estudio de tatuajes
+# Rede Social
 
-En este repositorio se encuentra una app que cumplen con certos requisitos de endpoints del parte de servidor. Los endpoints consiste en crear ciertas funcionalidades  e implementar URL especificas para que se puedan enviar sulicitudes HTTP para interactuar con un servicio de una app web. En los siguientes parrafos se abordara más acerca del proyecto y dela extructura del proyecto.
+En este repositorio se van a crear un sistema CRUD completo de endpoints de una Rede Social, para esto se necesita cumplir con los endpoints descripto en los requisitos adquiridos para el sistema.
 
 ## Tecnologías
 
 
 <img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"
 alt="Docker"/>
-<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"
+<img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white"
 alt="MySqls"/>
 <img src="https://img.shields.io/badge/NodeJs-339933?style=for-the-badge&logo=Node.js&logoColor=white"
 alt="Nodejs" />
@@ -45,7 +43,7 @@ alt="TypeScript" />
 
 ## Descripción
 
-El proyeto consiste en desarrollar una red social en las que se puede registrarse, accerder a la red e interactuar, con los demás usuarios del sistema.
+El proyeto consiste en desarrollar una rede social en las que se puede registrarse, accerder a la red e interactuar, con los demás usuarios del sistema.
 
 ## Requisitos funcionales
 
@@ -74,7 +72,7 @@ Usuarios
 | --- | --- | --- |
 | GET | /api/users | Ver todos los usuarios (super_admin) |
 | GET | /api/users/profile | Ver perfil de usuario |
-| PUT | /api/users/profile | Modificar datos del perfil (al menos un campo) |
+| PUT | /api/users/profile | Modificar datos del perfil |
 | GET | /api/users?email=ejemplo@ejemplo.com | Filtrar usuario por email (super_admin) |
 | DELETE | /api/users/{id} | Eliminar usuario (super_admin) |
 | PUT | /api/users/{id}/role | Cambio de role (super_admin) |
@@ -122,6 +120,110 @@ Otros aspectos requeridos:
 
 ## Estructura y diseño de la base de datos
 
+En seguida se mustrarán la imagen del modelado de base de datos y la construcción de algunas tablas
+
+<img src="./src/img/mongoose.png">
+
+El código que se muestra a continuación es del UserModel
+
+```tsx
+import { Schema, model, Document, Types } from "mongoose";
+
+interface User extends Document {
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+    seguidores?: Schema.Types.ObjectId;
+    siguiendo?: Schema.Types.ObjectId[];
+}
+
+const UserSchema = new Schema<User>(
+    {
+        name: {
+            type: String,
+            required: false,
+        },
+
+        email: {
+            type: String,
+            required: false,
+            unique: true,
+        },
+
+        password: {
+            type: String,
+            required: false,
+        },
+
+        role: {
+            type: String,
+            enum: ["user", "admin", "superAdmin"],
+            default: "user",
+        },
+
+    },
+    {
+        timestamps: true,
+        versionKey: false,
+    }
+)
+
+const UserModel = model<User>("User", UserSchema);
+
+export default UserModel;
+```
+
+A continuación se muestra la construcción del LikesModel
+```tsx
+import { Document, Schema, model } from "mongoose"
+
+interface Likes extends Document {
+    idPost: Schema.Types.ObjectId;
+    userIdPost: Schema.Types.ObjectId;
+    userIdLike: Schema.Types.ObjectId;
+    titlePost: string;
+    userNamePost: string;
+    userNameLike: string;
+    like: number;
+}
+
+const likesSchema = new Schema<Likes>(
+    {
+        idPost:
+        {
+            type: Schema.Types.ObjectId,
+            ref: "PostModel"
+        },
+
+        userIdPost:
+        {
+            type: Schema.Types.ObjectId,
+            ref: "PostModel"
+        },
+
+        userIdLike:
+        {
+            type: Schema.Types.ObjectId,
+            ref: "UserModel"
+        },
+
+        titlePost: String,
+        userNamePost: String,
+        userNameLike: String,
+        like: Number,
+    },
+
+    {
+        timestamps: true,
+        versionKey: false,
+    }
+)
+
+const LikeModel = model<Likes>("Likes", likesSchema);
+export default LikeModel;
+```
+
 La base de datos consta de cinco tablas:
 
 - La tabla UsersModel
@@ -130,11 +232,9 @@ La base de datos consta de cinco tablas:
 - La tabla LikesModel que hace referencia a los modelos de PostsModel y UsersModel
 - La tabla SeguidoresSeguidosModel que hace referencia a UsersModel
 
-<img src="./src/img/tatu.png">
-
 ## Estado del Proyecto
 
-
+El proyecto se encuentra concluido, ya que cumple con todos los requisitos adquirido para el sistema propocionado, que es la creación de una rede social de parte del bankend.
 
 ## Para el funcionamieto en entorno local
 Se necesita seguir los siguientes pasos:
@@ -150,11 +250,11 @@ $ npm install
 ```
 Para crear las migraciones
 ```
-$ npm run migrations-save
+$ npm run ....
 ```
 Para rellenar las tablas de base de datos
 ```
-$ npm run seeders
+$ npm run seeders ....
 ```
 Para la inicialización de la app
 ```
@@ -164,9 +264,89 @@ npm run dev
 ## Puesta en Marcha del Proyecto
 Para el correcto funcionamiento del proyecto, se desarrollará varias clases, que se ilustrarán con ejemplos de código.
 
-El siguiente código es del método `registrar`
+Los siguientes métodos son de los midleware.
+
+El siguiente método comprueba si el usuario tiene un token de acceso o no almacenado en la variable token un valor de cabezera y de autorización.
+
+```tsx
+import { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import { TokenData } from "../../types";
+import { CustomError, ServerError, UnauthorizedError } from "../utils/manejoErrores";
+
+export interface CustomRequest extends Request {
+    tokenData: TokenData;
+}
+
+export const auth = async (req: CustomRequest, res: Response, next: NextFunction) => {
+    try {
+        const token = req.headers.authorization?.split(" ")[1];
+        if (!token) {
+           throw new UnauthorizedError( 'Usuario no autorizado' )
+        }
+        const decode = jwt.verify(
+            token,
+            process.env.JWT_SECRET as string,
+        )
+        req.tokenData = decode as TokenData;
+        next();
+    } catch (error) {
+        if( error instanceof CustomError ){
+            error.sendResponse(res);
+
+        } else {
+            
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
+    }
+};
 
 ```
+
+Este método comprueba si el usuario es un super admin del sistema, ya que el super admin tiene ciertos privilegios en el sistema.
+
+```tsx
+
+import { NextFunction, Request, Response } from "express";
+import { CustomRequest } from "../../core/middlewares/auth"
+import UserModel from "../../entities/users/UsersModel";
+import { CustomError, NotFoundError, ServerError, UnauthorizedError } from "../utils/manejoErrores";
+
+export const isSuperAdmin = async (req: CustomRequest, res: Response, next: NextFunction) => {
+    try {
+        let userRole;
+        const user = await UserModel.findById(
+            {
+                _id: req.tokenData.usuarioId
+            }
+        )
+        if (!user) {
+            throw new NotFoundError('No se encontraron datos de usuario en la solicitud');
+
+        }
+
+        userRole = user.role
+        if( userRole !== "superAdmin"){
+            throw new UnauthorizedError( 'Usuario no autorizado' )
+        }
+        next();
+    } catch (error) {
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+            
+        }
+    }
+}
+```
+
+El siguiente código es del método `registrar`
+
+```tsx
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -274,7 +454,6 @@ const login = async (req: Request, res: Response) => {
             )
         }
 
-        ///////    VALIDAR PASSWORD
         const validarPwd = bcrypt.compareSync(password, user!.password);
         
         if (!validarPwd) {
@@ -286,7 +465,6 @@ const login = async (req: Request, res: Response) => {
             )
         }
 
-        ///////////     CREAR TOKEN 
         const token = jwt.sign(
             {
                 usuarioId: user._id,
@@ -316,6 +494,7 @@ const login = async (req: Request, res: Response) => {
     }
 }
 ```
+En la imagen de que se muestra a continuación se muestra que el usuario se ha logeado con sucesso y que ha recibido un token de acceso
 <img src="./src/img/2.png">
 
 Las siguientes lineas se mostrarán algunos códigos de diferentes endpoints con diferentes funcionalidades.
@@ -323,437 +502,341 @@ Las siguientes lineas se mostrarán algunos códigos de diferentes endpoints con
 El siguiente método se define los números de elementos a mostrar en cada pagina, y el limite de elementos establecido por el usuario. El método consiste en visualizar todos los usuarios del sistema.
 
 ```tsx
-const getUser = async (req: Request, res: Response) => {
+const ListarTodosUsuarios = async (req: Request, res: Response) => {
     try {
-        let limit = Number(req.query.limit) || 10
+        let limit = Number(req.query.limit) || 5
         const page = Number(req.query.page) || 1
         const skip = (page - 1) * limit
-        const users = await User.find({
-            select: {
-                id: true,
-                name: true,
-                lastname: true,
-                email: true
-            },
-            take: limit,
-            skip: skip
-        })
-        res.status(200).json({
-            success: true,
-            message: "Lista de usuario encontrado",
-            data: users
-        })
+        const lista = await UserModel.find()
+            .select("name")
+            .select("email")
+            .limit(limit)
+            .skip(skip);
+            
+        res.status(200).json(
+            {
+                success: true,
+                message: "Listado",
+                data: lista
+            }
+        )
+   
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Ocurrio un error al buscar usuario",
-            error: error
-        })
+           if( error instanceof CustomError){
+            error.sendResponse(res);
+
+           } else {
+
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+           }
+        
     }
-}
+};
 ```
 
-En las siguientes imagenes la primera se muestra el intento de un usuario que busca visualizar todos los usuarios del sistema, y el sistema le rechasa la petición ya que no tiene el permiso para acceder a dicha peticione, la segunda el usuario con el permiso que tiene por ser super Admin del sistema consigue visualizar todos los usuarios del sistema.
+En las siguientes imagen se muestra la visualizacion de usuarios del sistemas en una escala de 1 a 5 por paginas. Super Admin accediendo la visualización de los usuarios ya que es el único que tiene permisión para visualizar todos los usuarios del sistema
 
 <img src="./src/img/3.png">
 
-Super Admin accediendo la visualización de los usuarios.
+El siguiente método filtra busqueda de un comentario por Id del comentario, post, y nombre del usuario. Para este método se creo una interface y un objecto vacio de tipo queryFiltersI, y se comprueba su busqueda mediante método `find()`.
+
+```tsx
+const buscarComentario = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+        const { idComentario, idPos, userName } = req.query;
+        let limit = Number(req.query.limit) || 10
+        const page = Number(req.query.page) || 1
+        const skip = (page - 1) * limit
+
+        interface queryfiltrsI {
+            idComentario?: Types.ObjectId;
+            idPost?: Types.ObjectId;
+            userName?: string;
+        }
+
+        const queryfiltrs: queryfiltrsI = {}
+        if (idComentario && Types.ObjectId.isValid(idComentario as string)) {
+            queryfiltrs.idComentario = new Types.ObjectId(idComentario as string)
+        }
+
+        if (idPos && Types.ObjectId.isValid(idPos as string)) {
+            queryfiltrs.idPost = new Types.ObjectId(idPos as string);
+        }
+
+        if (userName) {
+            queryfiltrs.userName = userName as string
+        }
+
+        const mostrarIdComentario = await ComentarioModel.find(queryfiltrs)
+        .limit(limit)
+        .skip(skip)
+
+        res.status(200).json(
+            {
+                success: true,
+                message: "Datos del filtro",
+                data: mostrarIdComentario
+            }
+        )
+
+    } catch (error) {
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+            
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
+    }
+}
+```
+
+La siguiente imagen muestra el resultado de la busqueda.
 
 <img src="./src/img/4.png">
 
-El siguiente método es para crear un tipo de role en la app, ya que los permisos se establece por roles de usuarios.
+<img src="./src/img/4_1.png">
+
+El siguiente método tiene la funcionalidad de actualizar role de un usuario en sistema.
 
 ```tsx
-const crearRoles = async (req: Request, res: Response) => {
+const actualizarRolePorId = async (req: Request, res: Response) => {
     try {
-        const name = req.body.name;
+        const userId = req.params.id;
+        const role = req.body.role;
 
-        if (name.length > 50) {
-            return res.status(400).json({
-                success: true,
-                message: "El nombre es muy largo"
-            })
+        const updateRole = await UserModel.findOneAndUpdate(
+            {
+                _id: userId
+            },
+            {
+                role: role
+            },
+            {
+                new: true
+            }
+        )
+
+        if (!updateRole) {
+            throw new NotFoundError( 'No se encontraron datos en la solicitud' )
         }
-
-        const newRole = await Role.create({
-            name: name
-        }).save()
 
         res.status(200).json({
             success: true,
-            message: "Roles Creado"
+            message: "Role actualizado con éxito"
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Error al crear Role",
-            errro: error
-        })
+        if( error instanceof CustomError){
+            error.sendResponse(res);
 
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+            
+        }
     }
 }
 ```
 
-En la imagen de abajo se puede ver la creación de un nuevo role.
+En la siguiente imagen se puede ver como se ha actualizado el role de usuario.
 
 <img src="./src/img/5.png">
 
-Se puede ver la creación del role en la tabla roles de la base de datos
+El siguiente método tiene la funcionalidad de elimina un comentario
+
+```tsx
+const eliminarComentario = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+        const idComentario = req.params.id;
+
+        const user = await UserModel.findOne({ _id: userId });
+
+        const comentarioId = await ComentarioModel.findOne({ _id: idComentario });
+        if (!comentarioId) {
+            throw new NotFoundError('No se encontraron datos del comentario en la solicitud');
+        }
+
+        const donoPostId = await ComentarioModel.findOne({ userIdPost: user?.id })
+
+        const donoIdUserComentario = await ComentarioModel.findOne(
+            {
+                userIdComentario: user?.id,
+                _id: comentarioId
+
+            }
+        )
+
+        if (!donoPostId && !donoIdUserComentario) {
+            throw new ForbiddenError( 'Usuario no permitido' )
+        }
+
+        const comentarioEliminar = await ComentarioModel.findByIdAndDelete(comentarioId);
+        return res.status(200).json(
+            {
+                success: true,
+                message: "Comentario eliminado con succeso",
+                data: comentarioEliminar
+            }
+        )
+
+    } catch (error) {
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+            
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
+    }
+}
+```
+
+En la siguiente imagen se puede visualizar que se ha eliminado el comentario.
 
 <img src="./src/img/6.png">
 
-El siguiente método es de como eliminar un role el sistema. Para esto se recoge el id en una variable llama id_role, se busca el role y se comprueba que existe el tipo de role por el id, y si existe se elimina el role dentro del sistema.
-
+El código que se muestra a continuación sirve para dar y quitar like a un post, en esté método despues de eliminar el like no se quita el registro en la base de datos
 ```tsx
-const eliminarRole = async (req: Request, res: Response) => {
+const darlikes = async (req: Request, res: Response) => {
     try {
-        const id_role = req.params.id;
+        const userId = req.tokenData.usuarioId;
+        const postId = req.params.id;
+        let like = 1;
 
-        const buscarRole = await Role.findOne(
+        const user = await UserModel.findOne({ _id: userId });
+        if (!user) {
+            throw new NotFoundError(' No se encontraron datos de usuario en la solicitud ');
+        }
+
+        const post = await PostModel.findOne({ _id: postId });
+        if (!post) {
+            throw new NotFoundError(' No se encontraron datos del en la solicitud ');
+        }
+
+        const existLike = await LikeModel.findOne(
             {
-                where: {
-                    id: parseInt(id_role)
-                }
+                idPost: postId,
+                userIdLike: userId,
             }
         )
 
-        if (!buscarRole) {
-            return res.status(404).json({
-                success: false,
-                message: "Este role no existe"
-            })
+        if (existLike) {
+
+            like = existLike.like === 1 ? 0 : 1;
+            existLike.like = like;
+            await existLike.save();
+
+        } else {
+            
+            await LikeModel.create(
+                {
+                    like: like,
+                    idPost: post?._id,
+                    userIdPost: post?.userIdPost,
+                    userIdLike: user?._id,
+                    titlePost: post?.title,
+                    userNamePost: post.userName,
+                    userNameLike: user?.name
+                }
+            )
         }
 
-        const eminar = await Role.remove(buscarRole)
-        res.status(200).json({
-            success: true,
-            message: "Role eliminado con suceso"
-        })
+        res.status(200).json(
+            {
+                success: true,
+                message: "Like",
+            }
+        )
     } catch (error) {
-        res.status(200).json({
-            success: false,
-            message: "Error al intentar eliminar role"
-        })
+        if( error instanceof CustomError ){
+            error.sendResponse(res);
+
+        } else {
+            
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
     }
 }
 ```
 
-La siguiente imagen muestra la comprovación de eliminación de un role.
+Se puede visualizar la información del usuario que el like se ha almacenado o enviado, en la siguiente imagen.
 
 <img src="./src/img/7.png">
 
-En la siguiente linea se mostra la creación del método filtrar usuario por email y nombre. Para este método se creo una interface y un objecto vacio de tipo queryFiltersI, y se comprueba su busqueda mediante método `find()`.
+<img src="./src/img/7_1.png">
+
+El siguiente método muetra una lista de sus seguidores.
 
 ```tsx
-const getUserByEmail = async (req: Request, res: Response) => {
+const listarMisSeguidores = async (req: Request, res: Response) => {
     try {
-        const email = req.query.email;
-        const name = req.query.name;
+        const userId = req.tokenData.usuarioId;
+        let limit = Number(req.query.limit) || 10
+        const page = Number(req.query.page) || 1
+        const skip = (page - 1) * limit
 
-        interface queryFiltersI {
-            email?: string
-            name?: string
+        const user = await UserModel.findOne({ _id: userId });
+        if (!user) {
+            throw new NotFoundError( 'No se encontraron datos del usuario en la solicitud' );
         }
 
-        let queryFilters: queryFiltersI = {}
-
-        if (email) {
-            queryFilters.email = email as string
-        }
-
-        if (name) {
-            queryFilters.name = name as string
-        }
-
-        const users = await User.find(
-            {
-                where: queryFilters,
-                select: {
-                    id: true,
-                    name: true,
-                    lastname: true,
-                    email: true,
-                    role_id: true
-                }
-            }
-        )
+        const misSeguidores = await SeguidoresSeguidosModel.find( { idUserSiguiendo: userId, estadoSeguiendo: 1 } )
+        .select("NameUser")
+        .limit(limit)
+        .skip(skip)
 
         res.status(200).json({
             success: true,
-            message: "Usuario encontrado con suceso",
-            data: users
-        })
+            message: "Lista de seguidores",
+            data: misSeguidores
+        });
+
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Error al buscar usuario",
-            error: error
-        })
+        if (error instanceof CustomError) {
+            error.sendResponse(res);
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
     }
 }
 ```
 
-En la siguiente imagen se puede observar la filtración de un usuario por su email.
+Se puede visualizar la buscada de seguidores en la siguiente imagen.
 
 <img src="./src/img/8.png">
 
-El código que se muestra es del método visualizar perfil, para poder visualizar perfil se comprueba mendiante el token de usuario, ya que solo se puede visualizar su proprio perfil.
+En esta clase `server.ts` es la clase principal del programa
 
 ```tsx
-const myPerfil = async (req: Request, res: Response) => {
-    try {
-        const id_user = req.tokenData.roleId;
+import express, { Application } from "express";
+import bodyParser from "body-parser";
+import "dotenv/config";
+import { dbConnection } from "./core/database/db";
+import routerController from "./entities/controllers/routes";
+import routerUser from "./entities/users/routes";
+import routerPost from "./entities/posts/routes";
+import routerComentario from "./entities/comentarios/routes";
+import routerLike from "./entities/likes/routes";
+import routerSeguirSiguiendo from "./entities/seguidoreSeguidos/routes"
 
-        const getPerfil = await User.findOne(
-            {
-                where: {
-                    id: id_user
-                },
-                select: {
-                    id: true,
-                    name: true,
-                    lastname: true,
-                    email: true
-                }
-            }
-        )
-
-        res.status(200).json(
-            {
-                success: true,
-                message: "Datos carregados con suceso",
-                datos: getPerfil
-            }
-        )
-    } catch (error: any) {
-        res.status(500).json(
-            {
-                success: false,
-                message: "Error al carregar los datos",
-                error: error.message
-            }
-        )
-    }
-}
-```
-
-Se puede visualizar la información del usuario desde su perfil, en la siguiente imagen.
-
-<img src="./src/img/9.png">
-
-El siguiente método busca una cita pasando id de la cita como parametro, para esto también se necesita validar el usuario atraves del token de acceso, y se comprueba que solo se visualiza su cita no de otros usuarios del sistema.
-
-```tsx
-const buscarCitaPorId = async (req: Request, res: Response) => {
-    try {
-        const id_user = req.tokenData.roleId;
-        const id_appointment = Number(req.params.id);
-
-        const findCita = await Appointment.findOne(
-            {
-                where: {
-                    id: id_appointment,
-                    user: {
-                        id:id_user
-                    }
-                },
-                select:{
-                    id: true,
-                    services_id: true,
-                    appointments_date: true
-                }
-            }
-        )
-
-        if (!findCita) {
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "No existe la cita"
-                }
-            )
-        }
-        res.status(200).json(
-            {
-                success: true,
-                message: "Cita encontrada con suceso",
-                data:findCita
-            }
-        )
-    } catch (error) {
-        res.status(500).json(
-            {
-                success: false,
-                message: "Error al buscar la cita"
-            }
-        )
-
-    }
-}
-```
-
-Se puede visualizar la cita buscada por id en la siguiente imagen.
-
-<img src="./src/img/10.png">
-
-El siguiente método es de actualizar cita, que también requiere una validación por el token, para que solo el usuario logueado pueda actualizar su cita.
-
-```tsx
-const actualizarCita = async (req: Request, res: Response) => {
-    try {
-        const id_appointments = req.body.id;
-        const user_id = req.tokenData.roleId;
-        const services_id = req.body.services_id;
-
-        const findAppointment = await Appointment.findOne(
-            {
-                where: {
-                    id: id_appointments,
-                    user: { id: user_id },
-                }
-            }
-        )
-
-        if (!findAppointment) {
-            return res.status(404).json(
-                {
-                    success: false,
-                    message: "Datos introducidos no coinciden con los datos de la cosulta"
-                }
-            )
-        }
-
-        const actualizando = await Appointment.update(
-            {
-                id: id_appointments,
-                user: {
-                    id: user_id
-                },
-            },
-            {
-                id: id_appointments,
-                services_id: services_id
-            }
-        )
-        res.status(200).json(
-            {
-                success: true,
-                message: "Cita actualizada con suceso",
-                data: actualizando
-            }
-        )
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Error al actualizar la cita",
-            error: error
-        })
-    }
-}
-```
-
-En la siguiente imagen se visualiza la confirmación de actualización de una cita 
-
-<img src="./src/img/11.png">
-
-Los siguientes métodos son de los midleware.
-
-El siguiente método comprueba si el usuario tiene un token de acceso o no pasanso en la variable token un valor de cabezera y de autorización , y luego separa las cadena del encabezado de autorización en un arreglo utilizando el espacio y recoge el segundo elemento y luego comprueba si el usuario tiene un token o uno valido, luego verifica el token con la variable secreta,  en la siguiente linea almacena el token en req.tokenData y luego llama a la siguiente función.
-
-```tsx
-import { NextFunction, Request, Response } from "express";
-import Jwt from "jsonwebtoken";
-import { TokenData } from "../types";
-
-export const auth = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const token = req.headers.authorization?.split(" ")[1];
-        if (!token) {
-            return res.status(401).json({
-                success: false,
-                message: "Usuario no authorizado"
-            })
-        }
-
-        const decode = Jwt.verify(
-            token,
-            process.env.JWT_SECRET as string
-        )
-
-        req.tokenData = decode as TokenData;
-        next();
-    } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: "JWT no valido"
-        })
-    }
-}
-```
-
-Este método comprueba si el usuario es un superAdmin del sistema, para que pueda realizar ciertas tareas que solo el pueda realizar.
-
-```tsx
-import { NextFunction, Request, Response } from "express";
-
-export const isSuperAdmin = (req: Request, res: Response, next: NextFunction) => {
-    try {
-        if(req.tokenData.roleName !== 'superAdmin'){
-            return res.status(401).json({
-                success: false,
-                message: "No authorizado"
-            })
-        }
-        next();
-    } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: "No tienes permiso"
-        })
-    }
-}
-```
-
-En esta clase `server.ts` es donde se exportan todas las URL de cada método de diferentes clases
-
-```tsx
-import express, { Application } from 'express';
-import 'dotenv/config';
-import * as controllers from './controllers/controllers';
-import * as userControll from './controllers/userController';
-import { AppDataSource } from './database/db';
-import { login, register, registerAdministradores } from './controllers/authController';
-import { auth } from './middlewares/auth';
-import { isSuperAdmin } from './middlewares/isSuperAdmin';
-import { isUser } from './middlewares/isUser';
 
 const app: Application = express();
-const PORT = process.env.PORT || 9998;
-app.use(express.json());
+const PORT = process.env.PORT || 4998;
+app.use(bodyParser.json());
 
-app.get('/api/users', auth, isSuperAdmin, controllers.getUser);
-app.post('/api/roles/users',auth, controllers.crearRoles);
-app.get('/api', auth, isSuperAdmin, controllers.getUserByEmail);
-app.put('/api/users/:id', auth, isSuperAdmin, controllers.updateRoles);
-app.delete('/api/users/:id', auth, isSuperAdmin, controllers.deleteUserById);
-app.post('/api/services', auth, isSuperAdmin, controllers.crearServicio);
-app.put('/api/services/:id', auth, isSuperAdmin, controllers.editarServicio);
-app.delete('/api/services/:id', auth, isSuperAdmin, controllers.deleteServicio);
-app.delete('/api/role/:id', auth, isSuperAdmin, controllers.eliminarRole);
+app.use('/api', routerController);
+app.use('/api', routerUser);
+app.use('/api', routerPost);
+app.use('/api', routerComentario);
+app.use('/api', routerLike);
+app.use('/api', routerSeguirSiguiendo);
 
-app.post('/api/auth/register', register)
-app.post('/api/auth/superadmin', auth, isSuperAdmin, registerAdministradores);
-app.post('/api/auth/login', login);
-app.get('/api/services', auth, controllers.getServices);
-app.get('/api/users/profile', auth, userControll.myPerfil);
-
-app.put('/api/users/profile/:id', auth, isUser, userControll.getupdateUser);
-app.post('/api/appointments', auth, isUser, userControll.Appointments);
-app.get('/api/appointments/:id', auth, isUser, userControll.buscarCitaPorId);
-app.put('/api/appointments', auth, userControll.actualizarCita);
-app.get('/api/appointments', auth, userControll.misCitas);
-
-AppDataSource.initialize()
+dbConnection()
     .then(() => {
         console.log('Database connected');
     })
@@ -766,10 +849,6 @@ app.listen(PORT, () => {
 });
 
 ```
-
-La siguiente imagen muestra la estructura del proyecto con sus carpetas,
-
-<img src="./src/img/Captura de pantalla 2024-03-05 192339.png">
 
 ## Autor:
 
