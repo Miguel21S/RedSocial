@@ -3,7 +3,7 @@ import { Document, Schema, model } from "mongoose";
 
 interface SeguidoresSeguidos extends Document {
     idUserSiguiendo: Schema.Types.ObjectId;
-    IdUser: Schema.Types.ObjectId;
+    idUser: Schema.Types.ObjectId;
     NameUserSiguiendo: string;
     NameUser: string;
     estadoSeguiendo: number;
@@ -16,7 +16,7 @@ const SeguidoresSeguidosSchema = new Schema<SeguidoresSeguidos>(
             ref: 'UserModel',
         },
 
-        IdUser: {
+        idUser: {
             type: Schema.Types.ObjectId,
             ref: 'UserModel',
         },

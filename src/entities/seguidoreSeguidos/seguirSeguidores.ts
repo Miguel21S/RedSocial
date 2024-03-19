@@ -78,35 +78,28 @@ const verMisSeguidores = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
 
-        const user = await UserModel.findOne( { _id: userId } )
-        if(!user?._id){
-            throw new NotFoundError('No se encontraron datos del usuario a seguir en la solicitud');
+        const user = await UserModel.findOne({ _id: userId });
+        if (!user) {
+            throw new NotFoundError('No se encontraron datos del usuario en la solicitud');
         }
-        
-        const miSeguidores = await SeguidoresSeguidosModel.find(
-            {
-                idUserSiguiendo: user?._id
-            }
-        ). select("NameUser")
-     
-        res.status(200).json(
-            {
-                success: false,
-                message: "Lista de seguidores",
-                data: miSeguidores
-            }
-        )
-    } catch (error) {
-        if( error instanceof CustomError){
-            error.sendResponse(res);
 
+        const misSeguidores = await SeguidoresSeguidosModel.find({ idUserSiguiendo: userId });
+
+        res.status(200).json({
+            success: true,
+            message: "Lista de seguidores",
+            data: misSeguidores
+        });
+    } catch (error) {
+        if (error instanceof CustomError) {
+            error.sendResponse(res);
         } else {
             const serverError = new ServerError();
             serverError.sendResponse(res);
         }
-
     }
 }
+
 
 export {
     seguirUser, verMisSeguidores
