@@ -28,7 +28,7 @@ const registrar = async (req: Request, res: Response) => {
         }
 
         // VALIDACIÓN DEL EMAIL
-        const validEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+        const validEmail = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
         if (!validEmail.test(email)) {
             return res.status(400).json(
                 {
