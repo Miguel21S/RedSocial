@@ -82,13 +82,13 @@ const login = async (req: Request, res: Response) => {
                 }
             )
         }
-
+console.log("ANTES DEL FINDONE")
         const user = await UserModel.findOne(
             {
                 email: email
             }
         ).select("password")
-
+        console.log("DESPUES DEL FINDONE")
         if (!user) {
             return res.status(404).json(
                 {
@@ -129,7 +129,7 @@ const login = async (req: Request, res: Response) => {
             token: token,
         });
     } catch (error: any) {
-
+console.log("Estoy en el catch del login")
         return res.status(500).json(
             {
                 error:error.message
