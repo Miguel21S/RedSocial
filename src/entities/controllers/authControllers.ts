@@ -128,15 +128,22 @@ const login = async (req: Request, res: Response) => {
             message: "Se ha loguiado con suceso",
             token: token,
         });
-    } catch (error) {
-        if(error instanceof CustomError){
-            error.sendResponse(res)
+    } catch (error: any) {
 
-        } else {
+        return res.status(500).json(
+            {
+                error:error.message
+            }
+        )
 
-            const serverError = new ServerError();
-            serverError.sendResponse(res)
-        }
+        // if(error instanceof CustomError){
+        //     error.sendResponse(res)
+
+        // } else {
+
+        //     const serverError = new ServerError();
+        //     serverError.sendResponse(res)
+        // }
     }
 }
 
