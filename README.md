@@ -5,23 +5,23 @@
 ---
 
 <ul>
-<li> <a href="#red-social">Social Network</a> </li>
+<li> <a href="#social-network">Social Network</a> </li>
 
 <li><a href="#tecnologías">Technologies</a> </li>
 
-<li> <a href="#estructura-y-diseño-de-la-base-de-datos">Database structure and design</a> </li>
+<li> <a href="#Database-structure-and-design">Database structure and design</a> </li>
 
 <li> <a href="#estado-del-proyecto">Status of the Projectol</a> </li>
 
-<li> <a href="#descripción-de-las-tecnologías">Description of technologies</a> </li>
+<li> <a href="#description-of-technologies">Description of technologies</a> </li>
 
 <li> <a href="#endpoints">Endpoints</a> </li>
 
 <li> <a href="./src/fichero/endpoints.md">Complete list of entpoints</a> </li>
 
-<li> <a href="#puesta-en-marcha-del-proyecto">Project Start-up</a> </li>
+<li> <a href="#project-start-up">Project Start-up</a> </li>
 
-<li> <a href="#autor">Author</a> </li>
+<li> <a href="#author">Author</a> </li>
 
 </ul>
 
@@ -310,6 +310,8 @@ https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comment/id
     "comentario": "Minha querida irmã te amo muito"
 }
 ```
+<a href="./src/fichero/endpoints.md">Complete list of entpoints</a>
+
 ## Project Start-up
 For the correct functioning of the project, several classes will be developed, which will be illustrated with code examples.
 
