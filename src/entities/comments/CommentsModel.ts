@@ -1,16 +1,16 @@
 
 import { Schema, model, Document } from "mongoose";
 
-interface Comentario extends Document {
+interface Comments extends Document {
     idPost: Schema.Types.ObjectId;
     userIdPost: Schema.Types.ObjectId;
-    userIdComentario: Schema.Types.ObjectId;
+    userIdComments: Schema.Types.ObjectId;
     userNamePost: string;
-    userNameComentario: String;
-    comentario: String;
+    userNameComments: String;
+    Comments: String;
 }
 
-const comentariosSchema = new Schema<Comentario>(
+const commentsSchema = new Schema<Comments>(
     {
         idPost:
         {
@@ -24,15 +24,15 @@ const comentariosSchema = new Schema<Comentario>(
             ref: "PostModel"
         },
 
-        userIdComentario:
+        userIdComments:
         {
             type: Schema.Types.ObjectId,
             ref: "UserModel"
         },
 
         userNamePost: String,
-        userNameComentario: String,
-        comentario: String,
+        userNameComments: String,
+        Comments: String,
     },
 
     {
@@ -41,5 +41,5 @@ const comentariosSchema = new Schema<Comentario>(
     }
 )
 
-const ComentarioModel = model<Comentario>("Comentario", comentariosSchema);
-export default ComentarioModel;
+const CommentsModel = model<Comments>("Comentario", commentsSchema);
+export default CommentsModel;

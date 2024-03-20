@@ -6,9 +6,9 @@ import { dbConnection } from "./core/database/db";
 import routerController from "./entities/controllers/routes";
 import routerUser from "./entities/users/routes";
 import routerPost from "./entities/posts/routes";
-import routerComentario from "./entities/comentarios/routes";
+import routerComentario from "./entities/comments/routes";
 import routerLike from "./entities/likes/routes";
-import routerSeguirSiguiendo from "./entities/seguidoreSeguidos/routes"
+import routerSeguirSiguiendo from "./entities/followingFollowers/routes"
 
 const app: Application = express();
 const PORT = process.env.PORT || 4998;

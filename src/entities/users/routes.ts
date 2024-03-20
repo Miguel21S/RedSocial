@@ -1,17 +1,17 @@
 
 import { Router } from "express";
-import * as usarios from "./user";
+import * as users from "./userControllers";
 import { auth } from "../../core/middlewares/auth";
 import { isSuperAdmin } from "../../core/middlewares/isSuperAdmin";
 
 const router = Router();
 
 // router.put('/token', auth, addSiguiendo);
-router.get('/users/profile', auth, isSuperAdmin, usarios.ListarTodosUsuarios);
-router.put('/users/profile', auth, usarios.actualizarUsuario);
-router.get('/users', auth, isSuperAdmin, usarios.filtrarPorEmail);
-router.delete('/users/:id', auth, isSuperAdmin, usarios.EliminarPorId);
-router.put('/users/:id', auth, isSuperAdmin, usarios.actualizarRolePorId);
+router.get('/users/profile', auth, isSuperAdmin, users.listAllUsers);
+router.put('/users/profile', auth, users.updateUser);
+router.get('/users', auth, isSuperAdmin, users.updateRoleById);
+router.delete('/users/:id', auth, isSuperAdmin, users.filtrarByEmail);
+router.put('/users/:id', auth, isSuperAdmin, users.DeleteById);
 
 
 export default router;

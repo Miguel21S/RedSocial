@@ -21,25 +21,25 @@ class CustomError extends Error {
 }
 
 class UnauthorizedError extends CustomError {
-    constructor(message = 'Usuario no autenticado') {
+    constructor(message = 'Unauthorized user') {
         super(message, 401);
     }
 }
 
 class NotFoundError extends CustomError {
-    constructor(message = 'Recurso no encontrado') {
+    constructor(message = 'Resource not found') {
         super(message, 404);
     }
 }
 
 class ForbiddenError extends CustomError {
-    constructor(message = 'Usuario no permitido') {
+    constructor(message = 'User not allowed') {
         super(message, 403);
     }
 }
 
 class ServerError extends CustomError {
-    constructor(message = 'Error interno del servidor') {
+    constructor(message = 'Internal server error') {
         super(message, 500);
     }
 }

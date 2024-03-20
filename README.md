@@ -15,6 +15,10 @@
 
 <li> <a href="#descripción-de-las-tecnologías">Description of technologies</a> </li>
 
+<li> <a href="#endpoints">Endpoints</a> </li>
+
+<li> <a href="./src/fichero/endpoints.md">Complete list of entpoints</a> </li>
+
 <li> <a href="#puesta-en-marcha-del-proyecto">Project Start-up</a> </li>
 
 <li> <a href="#autor">Author</a> </li>
@@ -50,7 +54,16 @@ alt="TypeScript" /></a>
 ---
 ## Description
 
-The project consists of developing a social network in which you can register, access the network and interact with other users of the system..
+The project consists of developing a social network in which you can register, access the network and interact with other users of the system.
+
+In addition to what was requested for the project, an extra feature was added, that a user can follow and unfollow. 
+Apart from this I have added some more features like:
+Comments by id
+Edit comment by id
+Filter comment
+Delete comment by i
+List my
+List users who do
 
 ## Database structure and design
 
@@ -255,6 +268,48 @@ For the execution of seeders
 $ npm run seeders
 ```
 
+## Endpoints
+
+Auth Controllers POST
+```
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/auth/register
+```
+```jsx
+{
+    "name":"Miguel",
+    "email":"miguel@gmail.com",
+    "password": "Miguel12345."
+}
+```
+Login  POST
+```jsx
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/auth/login
+```
+```jsx
+{
+    "email":"miguel@gmail.com",
+    "password": "Miguel12345."
+}
+```
+Creat Comment POST
+```jsx
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comment/id
+
+```
+```jsx
+{
+    "comentario": "Equipa do bairro bem atoa"  
+} 
+```
+Update Comment  PUT
+```jsx
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comment/id
+```
+```jsx
+{
+    "comentario": "Minha querida irmã te amo muito"
+}
+```
 ## Project Start-up
 For the correct functioning of the project, several classes will be developed, which will be illustrated with code examples.
 

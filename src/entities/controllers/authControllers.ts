@@ -3,10 +3,10 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import UserModel from "../users/UsersModel";
-import  { CustomError, ServerError } from "../../core/utils/manejoErrores";
+import  { CustomError, ServerError } from "../../core/utils/errorHandling";
 
-////////////   MÉTODO REGISTRAR USUARIO   //////////////////////////
-const registrar = async (req: Request, res: Response) => {
+////////////   METHOD REGISTER USER   //////////////////////////
+const register = async (req: Request, res: Response) => {
     try {
         const name = req.body.name;
         const email = req.body.email;
@@ -16,14 +16,14 @@ const registrar = async (req: Request, res: Response) => {
         if(password.length < 8){
             return res.status(404).json({
                 success: false,
-                message: "La contraseña debe más de 8 caracteres"
+                message: "Password must be longer than 8 characters"
             })
         }
 
         if (!validPwd.test(password)) {
             return res.status(404).json({
                 success: false,
-                message: "La contraseña debe tener al menos un dígito, un carácter especia, una letra mayúscula, una letra minúscula, y que no tenga espacio."
+                message: "Password must have at least one digit, one special character, one uppercase letter, one lowercase letter, and no space."
             })
         }
 
@@ -33,7 +33,7 @@ const registrar = async (req: Request, res: Response) => {
             return res.status(400).json(
                 {
                     success: false,
-                    message: "formato de email invalido"
+                    message: "invalid email format"
                 }
             )
         }
@@ -52,7 +52,7 @@ const registrar = async (req: Request, res: Response) => {
         res.status(200).json(
             {
                 success: true,
-                message: "Usuario creado con suceso",
+                message: "User successfully created",
                 data: crearNuevoUser
             }
         )
@@ -68,7 +68,7 @@ const registrar = async (req: Request, res: Response) => {
     }
 }
 
-////////////   MÉTODO LOGIN   //////////////////////////
+////////////   LOGIN METHOD   //////////////////////////
 const login = async (req: Request, res: Response) => {
     try {
         const email = req.body.email;
@@ -78,22 +78,22 @@ const login = async (req: Request, res: Response) => {
             return res.status(404).json(
                 {
                     success: false,
-                    mesage: "Datos del login incorrecto"
+                    mesage: "Incorrect login data"
                 }
             )
         }
-console.log("ANTES DEL FINDONE")
+
         const user = await UserModel.findOne(
             {
                 email: email
             }
         ).select("password")
-        console.log("DESPUES DEL FINDONE")
+
         if (!user) {
             return res.status(404).json(
                 {
                     success: false,
-                    mesage: "Dato incorrecto"
+                    mesage: "Incorrect data"
                 }
             )
         }
@@ -125,11 +125,11 @@ console.log("ANTES DEL FINDONE")
  
         res.status(200).json({
             success: true,
-            message: "Se ha loguiado con suceso",
+            message: "Successfully completed",
             token: token,
         });
     } catch (error: any) {
-console.log("Estoy en el catch del login")
+
         // return res.status(500).json(
         //     {
         //         error:error.message
@@ -148,5 +148,5 @@ console.log("Estoy en el catch del login")
 }
 
 export {
-    registrar, login
+    register, login
 }

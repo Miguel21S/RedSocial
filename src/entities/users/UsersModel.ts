@@ -6,8 +6,8 @@ interface User extends Document {
     email: string;
     password: string;
     role: string;
-    seguidores?: Schema.Types.ObjectId;
-    siguiendo?: Schema.Types.ObjectId[];
+    // following?: Schema.Types.ObjectId;
+    // followers?: Schema.Types.ObjectId[];
 }
 
 const UserSchema = new Schema<User>(

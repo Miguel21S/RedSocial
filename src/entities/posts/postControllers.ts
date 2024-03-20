@@ -1,20 +1,20 @@
 import { Request, Response } from "express"
 import PostModel from "./PostsModel";
 import UserModel from "../users/UsersModel";
-import { CustomError, ForbiddenError, NotFoundError, ServerError } from "../../core/utils/manejoErrores";
+import { CustomError, ForbiddenError, NotFoundError, ServerError } from "../../core/utils/errorHandling";
 
-///////////////////////////          MÉTODO CREAR POST           /////////////////////////////////////
-const crearPost = async (req: Request, res: Response) => {
+///////////////////////////          CREATE POST METHOD           /////////////////////////////////////
+const creatPost = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
-        const { title, contenido } = req.body;
+        const { title, tests } = req.body;
 
         const user = await UserModel.findOne({ _id: userId })
     
-        const publicarPost = await PostModel.create(
+        const publicPost = await PostModel.create(
             {
                 title,
-                contenido,
+                tests,
                 userIdPost: user?.id,
                 userName: user?.name
             },
@@ -23,8 +23,8 @@ const crearPost = async (req: Request, res: Response) => {
         res.status(200).json(
             {
                 success: true,
-                message: "Post creado con succeso",
-                data: publicarPost
+                message: "Post created with success",
+                data: publicPost
             }
         )
 
@@ -39,25 +39,25 @@ const crearPost = async (req: Request, res: Response) => {
     }
 }
 
-///////////////////////////          MÉTODO ACTUALIZAR POST POR ID       /////////////////////////////
-const actualizarPostPorId = async (req: Request, res: Response) => {
+///////////////////////////          METHOD UPDATE POST BY ID       /////////////////////////////
+const updatePostById = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId
         const postId = req.params.id;
-        const { title, contenido } = req.body
+        const { title, tests } = req.body
 
         const user = await UserModel.findOne( { _id: userId } )
 
-        const encontartPostId = await PostModel.findOne( { _id: postId } )
+        const foundPostById = await PostModel.findOne( { _id: postId } )
 
-        if (!encontartPostId) {
-            throw new NotFoundError( 'No se encontraron datos en la solicitud' );
+        if (!foundPostById) {
+            throw new NotFoundError( 'No data found in the request' );
         }
 
-        const userIdEnPost = await PostModel.findOne( { userIdPost: encontartPostId?.id } )
+        const userIdEnPost = await PostModel.findOne( { userIdPost: foundPostById?.id } )
 
         if (userIdEnPost?.id !== user?.id) {
-            throw new ForbiddenError( 'Usuario no permitido' )
+            throw new ForbiddenError( 'User not allowed' )
         }
 
         const updatePost = await PostModel.findByIdAndUpdate(
@@ -65,7 +65,7 @@ const actualizarPostPorId = async (req: Request, res: Response) => {
             
             {
                 title: title,
-                contenido: contenido
+                tests: tests
             },
 
             { new: true }
@@ -74,7 +74,7 @@ const actualizarPostPorId = async (req: Request, res: Response) => {
         res.status(200).json(
             {
                 success: true,
-                message: "Post actualizado con suceso"
+                message: "Post update with success"
             }
         )
 
@@ -89,8 +89,8 @@ const actualizarPostPorId = async (req: Request, res: Response) => {
     }
 }
 
-///////////////////////////          MÉTODO LISTAR MIS POSTS       /////////////////////////////
-const listarMisPosts = async (req: Request, res: Response) => {
+///////////////////////////          METHOD LIST MY POSTS       /////////////////////////////
+const listMyPosts = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
         let limit = Number(req.query.limit) || 10
@@ -102,7 +102,7 @@ const listarMisPosts = async (req: Request, res: Response) => {
                 { _id: userId }
             )
 
-        const userIdEnPost = await PostModel.find(
+        const userIdInPost = await PostModel.find(
             { userIdPost: user?.id }
         )
         .limit(limit)
@@ -111,8 +111,8 @@ const listarMisPosts = async (req: Request, res: Response) => {
         res.status(200).json(
             {
                 success: true,
-                message: "Lista de posts",
-                data: userIdEnPost
+                message: "List of posts",
+                data: userIdInPost
             }
         )
     } catch (error) {
@@ -126,8 +126,8 @@ const listarMisPosts = async (req: Request, res: Response) => {
     }
 }
 
-///////////////////////////          MÉTODO LISTAR POSTS       /////////////////////////////
-const listarPosts = async (req: Request, res: Response) => {
+///////////////////////////          LIST POSTS METHOD       /////////////////////////////
+const listPosts = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
         let limit = Number(req.query.limit) || 10
@@ -141,7 +141,7 @@ const listarPosts = async (req: Request, res: Response) => {
         res.status(200).json(
             {
                 success: true,
-                message: "Lista encontrado con succeso",
+                message: "List found with success",
                 data: listPosts
             }
         )
@@ -156,8 +156,8 @@ const listarPosts = async (req: Request, res: Response) => {
     }
 }
 
-///////////////////////////          MÉTODO LISTAR POSTS POR ID      /////////////////////////////
-const listarPostPorId = async (req: Request, res: Response) => {
+///////////////////////////          LIST POSTS BY ID METHOD      /////////////////////////////
+const listPostById = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
         const postId = req.params.id;
@@ -168,13 +168,13 @@ const listarPostPorId = async (req: Request, res: Response) => {
         )
 
         if(!listPost){
-            throw new NotFoundError( 'No se encontraron datos de la lista en la solicitud' );
+            throw new NotFoundError( 'No list data found in the application' );
         }
 
         res.status(200).json(
             {
                 success: true,
-                message: "Post encontrado con succeso",
+                message: "Post found with success",
                 data: listPost
             }
         )
@@ -189,8 +189,8 @@ const listarPostPorId = async (req: Request, res: Response) => {
     }
 }
 
-///////////////////////////          MÉTODO RECUPERAR POSTS DE UN USUARIO POR ID      /////////////////////////////
-const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
+///////////////////////////          METHOD TO RETRIEVE POSTS OF A USER BY ID      /////////////////////////////
+const retrieveUserPostById = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
         const idUserEnPost = req.params.id;
@@ -200,23 +200,23 @@ const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
 
         const IdUser = await UserModel.findById( idUserEnPost )
         if(!IdUser){
-             throw new NotFoundError( 'No se encontraron datos de usuario en la solicitud' );
+             throw new NotFoundError( 'No user data found in the request' );
         }
 
-        const encontrarUserIdEnPost = await PostModel.findOne(
+        const foundUserIdInPost = await PostModel.findOne(
             { userIdPost: IdUser?.id }
         )
 
-        if( encontrarUserIdEnPost?.id !== IdUser?.id ){
+        if( foundUserIdInPost?.id !== IdUser?.id ){
             return res.json(
                 {
                     success: false,
-                    message: "Usuario no tine posts"
+                    message: "User has no posts"
                 }
             )
         }
 
-        const encontrarUserIdEnPosts = await PostModel.find(
+        const foundUserIdInPosts = await PostModel.find(
             { userIdPost: IdUser?.id}
         )
         .limit(limit)
@@ -225,8 +225,8 @@ const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
         return res.status(200).json(
             {
                 success: true,
-                message: "Posts encontrado con succeso",
-                data: encontrarUserIdEnPosts
+                message: "Posts found with succeso",
+                data: foundUserIdInPosts
             }
         )
     } catch (error) {
@@ -240,28 +240,28 @@ const recuperarPostDeUnUsuarioPorId = async (req: Request, res: Response) => {
     }
 }
 
-///////////////////////////          MÉTODO ELIMINAR POST           /////////////////////////////////////
-const EliminarPostPorId = async (req: Request, res: Response) => {
+///////////////////////////          DELETE POST METHOD           /////////////////////////////////////
+const deletePostById = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
         const postId = req.params.id;
 
         const user = await UserModel.findOne( { _id: userId } )
 
-        const encontartPostId = await PostModel.findOne( { _id: postId } )
+        const foundPostById = await PostModel.findOne( { _id: postId } )
 
-        if (!encontartPostId) {
-            throw new NotFoundError( 'No se encontraron datos en la solicitud' );
+        if (!foundPostById) {
+            throw new NotFoundError( 'No data found in the request' );
         }
 
-        const userIdEnPost = await PostModel.findOne(
+        const userIdInPost = await PostModel.findOne(
             {
-                userIdPost: encontartPostId?.id
+                userIdPost: foundPostById?.id
             }
         )
 
-        if (userIdEnPost?.id !== user?.id) {
-            throw new ForbiddenError( 'Usuario no permitido' )
+        if (userIdInPost?.id !== user?.id) {
+            throw new ForbiddenError( 'User not allowed' )
 
         }
 
@@ -270,7 +270,7 @@ const EliminarPostPorId = async (req: Request, res: Response) => {
         res.status(200).json(
             {
                 success: true,
-                message: "Post eliminado con suceso"
+                message: "Post successfully deleted"
             }
         )
     } catch (error) {
@@ -286,7 +286,7 @@ const EliminarPostPorId = async (req: Request, res: Response) => {
 }
 
 export {
-    crearPost, EliminarPostPorId, actualizarPostPorId,
-    listarMisPosts, listarPosts, listarPostPorId,
-    recuperarPostDeUnUsuarioPorId
+    creatPost, updatePostById, listMyPosts,
+    listPosts, listPostById, retrieveUserPostById,
+    deletePostById
 }

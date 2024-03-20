@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import * as likes from "./likes";
+import * as likes from "./likesControllers";
 import { auth } from "../../core/middlewares/auth";
 
 const router = Router();

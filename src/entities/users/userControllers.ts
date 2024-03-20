@@ -2,10 +2,10 @@
 import { Request, Response } from "express";
 import UserModel from "./UsersModel";
 import bcrypt from "bcrypt";
-import { CustomError, NotFoundError, ServerError } from "../../core/utils/manejoErrores";
+import { CustomError, NotFoundError, ServerError } from "../../core/utils/errorHandling";
 
-/////////////////          MÉTODO LISTAR TODOS LOS USUARIOS         /////////////////////////////////
-const ListarTodosUsuarios = async (req: Request, res: Response) => {
+/////////////////          METHOD LIST ALL USERS         /////////////////////////////////
+const listAllUsers = async (req: Request, res: Response) => {
     try {
         let limit = Number(req.query.limit) || 10
         const page = Number(req.query.page) || 1
@@ -37,8 +37,8 @@ const ListarTodosUsuarios = async (req: Request, res: Response) => {
     }
 };
 
-/////////////////          MÉTODO ACTUALIZAR         /////////////////////////////////
-const actualizarUsuario = async (req: Request, res: Response) => {
+/////////////////          UPDATE METHOD         /////////////////////////////////
+const updateUser = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
         const name = req.body.name;
@@ -65,7 +65,7 @@ const actualizarUsuario = async (req: Request, res: Response) => {
         res.status(200).json(
             {
                 success: false,
-                message: "Datos actualizado con suceso",
+                message: "Data updated with success",
                 data: updateUser
             }
         )
@@ -82,8 +82,8 @@ const actualizarUsuario = async (req: Request, res: Response) => {
     }
 }
 
-/////////////////          MÉTODO BUSCAR POR EMAIL         /////////////////////////////////
-const filtrarPorEmail = async (req: Request, res: Response) => {
+/////////////////          SEARCH BY EMAIL METHOD         /////////////////////////////////
+const filtrarByEmail = async (req: Request, res: Response) => {
     try {
         const email = req.query.email;
 
@@ -100,7 +100,7 @@ const filtrarPorEmail = async (req: Request, res: Response) => {
 
         res.status(200).json({
             success: true,
-            message: "Usuario encontrado con suceso",
+            message: "User found with success",
             data: getEmail
         })
     } catch (error) {
@@ -116,7 +116,7 @@ const filtrarPorEmail = async (req: Request, res: Response) => {
 }
 
 /////////////////          MÉTODO ELIMINAR POR ID         /////////////////////////////////
-const EliminarPorId = async (req: Request, res: Response) => {
+const DeleteById = async (req: Request, res: Response) => {
     try {
         const userId = req.params.id;
         
@@ -127,14 +127,14 @@ const EliminarPorId = async (req: Request, res: Response) => {
         )
 
         if(!confirmar){
-            throw new NotFoundError( 'No se encontraron datos en la solicitud' );
+            throw new NotFoundError( 'No data found in the request' );
         }
         const deleteUser = await UserModel.findByIdAndDelete(userId)
 
         res.status(200).json(
             {
                 success: true,
-                message: "Usuario eliminado con suceso"
+                message: "User successfully deleted"
             }
         )
     } catch (error) {
@@ -150,7 +150,7 @@ const EliminarPorId = async (req: Request, res: Response) => {
 }
 
 /////////////////          MÉTODO BUSCAR POR EMAIL         /////////////////////////////////
-const actualizarRolePorId = async (req: Request, res: Response) => {
+const updateRoleById = async (req: Request, res: Response) => {
     try {
         const userId = req.params.id;
         const role = req.body.role;
@@ -168,12 +168,12 @@ const actualizarRolePorId = async (req: Request, res: Response) => {
         )
 
         if (!updateRole) {
-            throw new NotFoundError( 'No se encontraron datos en la solicitud' )
+            throw new NotFoundError( 'No data found in the request' )
         }
 
         res.status(200).json({
             success: true,
-            message: "Role actualizado con éxito"
+            message: "Role successfully updated"
         });
     } catch (error) {
         if( error instanceof CustomError){
@@ -188,6 +188,6 @@ const actualizarRolePorId = async (req: Request, res: Response) => {
 }
 
 export {
-    ListarTodosUsuarios, actualizarUsuario, filtrarPorEmail,
-    EliminarPorId, actualizarRolePorId
+    listAllUsers, updateUser, filtrarByEmail,
+    DeleteById, updateRoleById
 }

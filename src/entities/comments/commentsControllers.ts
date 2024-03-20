@@ -1,43 +1,43 @@
 
-import { Request, Response } from "express"
-import ComentarioModel from "./ComentariosModel";
+import { Request, Response } from "express";
 import UserModel from "../users/UsersModel";
 import PostModel from "../posts/PostsModel";
 import { Types } from "mongoose";
-import { CustomError, ForbiddenError, NotFoundError, ServerError } from "../../core/utils/manejoErrores";
+import { CustomError, ForbiddenError, NotFoundError, ServerError } from "../../core/utils/errorHandling";
+import CommentsModel from "./CommentsModel";
 
-////////////////////////// MÉTODO COMENTARIO     ////////////////////////
-const crearComentario = async (req: Request, res: Response) => {
+////////////////////////// COMMENTARY METHOD     ////////////////////////
+const createComment = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
         const postId = req.params.id;
-        const { comentario } = req.body;
+        const { comments } = req.body;
 
         const user = await UserModel.findOne({ _id: userId });
         if (!user) {
-            throw new NotFoundError(' No se encontraron datos de usuario en la solicitud ');
+            throw new NotFoundError(' No user data found in the request ');
         }
 
         const idPosts = await PostModel.findOne({ _id: postId });
         if (!idPosts) {
-            throw new NotFoundError(' No se encontraron datos del post en la solicitud ');
+            throw new NotFoundError(' No post data found in the request ');
         }
 
-        const comentarPost = await ComentarioModel.create(
+        const comentarPost = await CommentsModel.create(
             {
-                comentario,
+                comments,
                 idPost: idPosts?._id,
                 userIdPost: idPosts?.userIdPost,
                 userNamePost: idPosts?.userName,
-                userIdComentario: user?.id,
-                userNameComentario: user.name
+                userIdComments: user?.id,
+                userNameComments: user.name
             }
         )
 
         return res.status(200).json(
             {
                 success: true,
-                message: "Post creado con succeso",
+                message: "Post created with success",
                 data: comentarPost
             }
         )
@@ -52,24 +52,24 @@ const crearComentario = async (req: Request, res: Response) => {
     }
 }
 
-////////////////////////// MÉTODO FILTRAR BUSQUEDA DE COMENTARIO     ////////////////////////
-const buscarComentario = async (req: Request, res: Response) => {
+////////////////////////// FILTER COMMENT SEARCH METHOD     ////////////////////////
+const searchComment = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
-        const { idComentario, idPos, userName } = req.query;
+        const { idComment, idPos, userName } = req.query;
         let limit = Number(req.query.limit) || 10
         const page = Number(req.query.page) || 1
         const skip = (page - 1) * limit
 
         interface queryfiltrsI {
-            idComentario?: Types.ObjectId;
+            idComment?: Types.ObjectId;
             idPost?: Types.ObjectId;
             userName?: string;
         }
 
         const queryfiltrs: queryfiltrsI = {}
-        if (idComentario && Types.ObjectId.isValid(idComentario as string)) {
-            queryfiltrs.idComentario = new Types.ObjectId(idComentario as string)
+        if (idComment && Types.ObjectId.isValid(idComment as string)) {
+            queryfiltrs.idComment = new Types.ObjectId(idComment as string)
         }
 
         if (idPos && Types.ObjectId.isValid(idPos as string)) {
@@ -80,7 +80,7 @@ const buscarComentario = async (req: Request, res: Response) => {
             queryfiltrs.userName = userName as string
         }
 
-        const mostrarIdComentario = await ComentarioModel.find(queryfiltrs)
+        const showIdComment = await CommentsModel.find(queryfiltrs)
         .select("userNamePost")
         .select("userNameComentario")
         .select("comentario")
@@ -90,8 +90,8 @@ const buscarComentario = async (req: Request, res: Response) => {
         res.status(200).json(
             {
                 success: true,
-                message: "Datos del filtro",
-                data: mostrarIdComentario
+                message: "Filter data",
+                data: showIdComment
             }
         )
 
@@ -106,34 +106,34 @@ const buscarComentario = async (req: Request, res: Response) => {
     }
 }
 
-////////////////////////// MÉTODO EDITAR COMENTARIO     ////////////////////////
-const editarComentario = async (req: Request, res: Response) => {
+////////////////////////// EDIT COMMENT METHOD     ////////////////////////
+const editComment = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
-        const { comentario } = req.body;
-        const comentarioId = req.params.id;
+        const { comment } = req.body;
+        const commentId = req.params.id;
 
         const user = await UserModel.findOne({ _id: userId });
 
-        const encontrarcomentario = await ComentarioModel.findOne({ _id: comentarioId });
-        if (!encontrarcomentario) {
-            throw new NotFoundError('No se encontraron datos del comentario en la solicitud');
+        const foundcomment = await CommentsModel.findOne({ _id: commentId });
+        if (!foundcomment) {
+            throw new NotFoundError('No comment data found in the request');
         }
 
-        const donoComentario = await ComentarioModel.findOne(
+        const authorComment = await CommentsModel.findOne(
             {
-                userIdComentario: user?.id
+                userIdComments: user?.id
             }
         );
 
-        if (!donoComentario) {
-            throw new NotFoundError('No se encontraron datos de usuario en la solicitud');
+        if (!authorComment) {
+            throw new NotFoundError('No user data found in the request');
         }
 
-        const comentarioEditar = await ComentarioModel.findByIdAndUpdate(
-            { _id: comentarioId },
+        const commentEdit = await CommentsModel.findByIdAndUpdate(
+            { _id: commentId },
 
-            { comentario: comentario },
+            { comment: comment },
 
             { new: true }
         );
@@ -141,7 +141,7 @@ const editarComentario = async (req: Request, res: Response) => {
             {
                 success: true,
                 message: "Comentario editado con succeso",
-                data: comentarioEditar
+                data: commentEdit
             }
         )
     } catch (error) {
@@ -155,38 +155,38 @@ const editarComentario = async (req: Request, res: Response) => {
     }
 }
 
-////////////////////////// MÉTODO ELIMINAR COMENTARIO     ////////////////////////
-const eliminarComentario = async (req: Request, res: Response) => {
+////////////////////////// DELETE COMMENT METHOD     ////////////////////////
+const deleteComment = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
-        const idComentario = req.params.id;
+        const idComment = req.params.id;
 
         const user = await UserModel.findOne({ _id: userId });
 
-        const comentarioId = await ComentarioModel.findOne({ _id: idComentario });
-        if (!comentarioId) {
-            throw new NotFoundError('No se encontraron datos del comentario en la solicitud');
+        const commentId = await CommentsModel.findOne({ _id: idComment });
+        if (!commentId) {
+            throw new NotFoundError('No comment data found in the request');
         }
 
-        const donoPostId = await ComentarioModel.findOne({ userIdPost: user?.id })
+        const donoPostId = await CommentsModel.findOne({ userIdPost: user?.id })
 
-        const donoIdUserComentario = await ComentarioModel.findOne(
+        const donoIdUserComentario = await CommentsModel.findOne(
             {
-                userIdComentario: user?.id,
-                _id: comentarioId
+                userIdComments: user?.id,
+                _id: commentId
 
             }
         )
 
         if (!donoPostId && !donoIdUserComentario) {
-            throw new ForbiddenError( 'Usuario no permitido' )
+            throw new ForbiddenError( 'User not allowed' )
         }
 
-        const comentarioEliminar = await ComentarioModel.findByIdAndDelete(comentarioId);
+        const comentarioEliminar = await CommentsModel.findByIdAndDelete(commentId);
         return res.status(200).json(
             {
                 success: true,
-                message: "Comentario eliminado con succeso",
+                message: "Comment successfully deleted",
                 data: comentarioEliminar
             }
         )
@@ -203,6 +203,7 @@ const eliminarComentario = async (req: Request, res: Response) => {
 }
 
 export {
-    crearComentario, editarComentario, eliminarComentario,
-    buscarComentario
+    createComment,searchComment,
+     editComment, deleteComment,
+    
 }

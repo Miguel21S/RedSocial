@@ -4,8 +4,8 @@ import { faker } from "@faker-js/faker"
 import User from "../../../entities/users/UsersModel"
 import Post from "../../../entities/posts/PostsModel"
 import Like from "../../../entities/likes/LikesModel";
-import Comentario from "../../../entities/comentarios/ComentariosModel";
-import SeguidoresSeguidos from "../../../entities/seguidoreSeguidos/seguidoresSeguidosModel";
+import Comentario from "../../../entities/comments/CommentsModel";
+import SeguidoresSeguidos from "../../../entities/followingFollowers/followingFollowersModel";
 import "dotenv/config"
 import { dbConnection } from "../db"
 import bcrypt from "bcrypt"

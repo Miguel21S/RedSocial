@@ -1,56 +1,56 @@
 
 import { Request, Response } from "express";
 import UserModel from "../users/UsersModel";
-import SeguidoresSeguidosModel from "./seguidoresSeguidosModel";
-import { CustomError, NotFoundError, ServerError } from "../../core/utils/manejoErrores";
+import { CustomError, NotFoundError, ServerError } from "../../core/utils/errorHandling";
+import followingFollowersModel from "./followingFollowersModel";
 
-///////////////////////////           MÉTODO SEGUIR Y DEJAR DE SEGUIR      /////////////////////////////////////
-const seguirUser = async (req: Request, res: Response) => {
+///////////////////////////           FOLLOW AND STOP FOLLOWING METHOD      /////////////////////////////////////
+const followingUser = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
-        const idUserSiguiendo = req.params.id;
-        let estadoSeguiendo = 1;
+        const idUserFollowers = req.params.id;
+        let statusFollowers = 1;
 
         const user = await UserModel.findOne({ _id: userId });
         if (!user?._id) {
-            throw new NotFoundError('No se encontraron datos del usuario en la solicitud');
+            throw new NotFoundError('No user data found in the request');
         }
 
-        const userSeguiendo = await UserModel.findOne({ _id: idUserSiguiendo });
+        const userFollowers = await UserModel.findOne({ _id: idUserFollowers });
 
-        if (!userSeguiendo?._id) {
-            throw new NotFoundError('No se encontraron datos del usuario a seguir en la solicitud');
+        if (!userFollowers?._id) {
+            throw new NotFoundError('No user data found to follow up on the request');
         }
 
-        if (user?._id.equals(userSeguiendo?._id)) {
+        if (user?._id.equals(userFollowers?._id)) {
             return res.json(
                 {
                     success: false,
-                    message: "No se puedes seguirte a ti mismo"
+                    message: "You cannot follow yourself"
                 }
             )
         }
 
-        const yaSuigues = await SeguidoresSeguidosModel.findOne(
+        const yaSuigues = await followingFollowersModel.findOne(
             {
                 idUser: user?._id,
-                idUserSiguiendo: userSeguiendo?._id,
+                idUserFollowers: userFollowers?._id,
 
             }
         )
 
         if (yaSuigues) {
-            estadoSeguiendo = yaSuigues.estadoSeguiendo === 1 ? 0 : 1;
-            yaSuigues.estadoSeguiendo = estadoSeguiendo;
+            statusFollowers = yaSuigues.statusFollowers === 1 ? 0 : 1;
+            yaSuigues.statusFollowers = statusFollowers;
             await yaSuigues.save();
 
         } else {
 
-            await SeguidoresSeguidosModel.create(
+            await followingFollowersModel.create(
                 {
-                    estadoSeguiendo: estadoSeguiendo,
-                    idUserSiguiendo: userSeguiendo?._id,
-                    NameUserSiguiendo: userSeguiendo?.name,
+                    statusFollowers: statusFollowers,
+                    idUserFollowers: userFollowers?._id,
+                    NameUserFollowers: userFollowers?.name,
                     idUser: user?._id,
                     NameUser: user?.name
                 }
@@ -60,7 +60,7 @@ const seguirUser = async (req: Request, res: Response) => {
         res.status(200).json(
             {
                 success: true,
-                message: "Listo ahora estas siguiendo a ..."
+                message: "Ready now you are following ..."
             }
         )
     } catch (error) {
@@ -75,8 +75,8 @@ const seguirUser = async (req: Request, res: Response) => {
     }
 }
 
-///////////////////////////           MÉTODO QUE LISTA TODOS MIS SEGUIDORES      /////////////////////////////////////
-const listarMisSeguidores = async (req: Request, res: Response) => {
+///////////////////////////           METHOD THAT LISTS ALL MY FOLLOWERS      /////////////////////////////////////
+const listMyFollowing = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
         let limit = Number(req.query.limit) || 10
@@ -85,17 +85,17 @@ const listarMisSeguidores = async (req: Request, res: Response) => {
 
         const user = await UserModel.findOne({ _id: userId });
         if (!user) {
-            throw new NotFoundError( 'No se encontraron datos del usuario en la solicitud' );
+            throw new NotFoundError( 'No user data found in the request' );
         }
 
-        const misSeguidores = await SeguidoresSeguidosModel.find( { idUserSiguiendo: userId, estadoSeguiendo: 1 } )
+        const misSeguidores = await followingFollowersModel.find( { idUserFollowers: userId, statusFollowers: 1 } )
         .select("NameUser")
         .limit(limit)
         .skip(skip)
 
         res.status(200).json({
             success: true,
-            message: "Lista de seguidores",
+            message: "List of followers",
             data: misSeguidores
         });
 
@@ -109,8 +109,8 @@ const listarMisSeguidores = async (req: Request, res: Response) => {
     }
 }
 
-///////////////////////////           MÉTODO SEGUIR QUE LISTA DOTOS LOS USUARIOS QUE SIGO      /////////////////////////////////////
-const losSiguidos = async (req: Request, res: Response) => {
+///////////////////////////           METHOD TO FOLLOW WHICH LIST THE USERS I FOLLOW      /////////////////////////////////////
+const followers = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
         let limit = Number(req.query.limit) || 10
@@ -119,18 +119,18 @@ const losSiguidos = async (req: Request, res: Response) => {
 
         const user = await UserModel.findOne({ _id: userId });
         if (!user) {
-            throw new NotFoundError('No se encontraron datos del usuario en la solicitud');
+            throw new NotFoundError('No user data found in the request');
         }
 
-        const siguiendo = await SeguidoresSeguidosModel.find({ idUser: userId, estadoSeguiendo: 1 })
+        const follow = await followingFollowersModel.find({ idUser: userId, statusFollowers: 1 })
         .select("NameUserSiguiendo")
         .limit(limit)
         .skip(skip)
        
         res.status(200).json({
             success: true,
-            message: "Lista de siguiendo",
-            data: siguiendo
+            message: "List of followers",
+            data: follow
         });
 
     } catch (error) {
@@ -144,5 +144,5 @@ const losSiguidos = async (req: Request, res: Response) => {
 }
 
 export {
-    seguirUser, listarMisSeguidores, losSiguidos
+    followingUser, listMyFollowing, followers
 }
