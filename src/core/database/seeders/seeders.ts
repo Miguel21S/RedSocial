@@ -32,7 +32,7 @@ const createSeedData = async () => {
 
         // Crear 20 usuarios y recoger sus IDs
         let userIds = []; // Inicializar el arreglo de userIds
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 10; i++) {
             const user = new User({
                 name: faker.internet.userName(),
                 email: faker.internet.email(),
@@ -44,15 +44,15 @@ const createSeedData = async () => {
             // Para cada usuario, crear 10 posts
             for (let j = 0; j < 10; j++) {
                 const post = new Post({
+                    userIdPost: user._id,
                     userName: user.name,
                     title: faker.lorem.sentence(),
-                    contenido: faker.lorem.paragraphs(),
-                    userIdPost: user._id,
+                    tests: faker.lorem.paragraphs(),
                 });
                 await post.save();
 
                 // Crear likes para cada post
-                for (let k = 0; k < Math.floor(Math.random() * 10); k++) {
+                for (let k = 0; k < Math.floor(Math.random() * 7); k++) {
                     const randomUserIndex = Math.floor(Math.random() * userIds.length);
                     const userDoc = await User.findById(userIds[randomUserIndex]).lean();
                     const userNameLike = userDoc ? userDoc.name as string : ''; // Asignación de tipo para userNameLike
@@ -72,14 +72,14 @@ const createSeedData = async () => {
                 for (let l = 0; l < Math.floor(Math.random() * 5); l++) {
                     const randomUserIndex = Math.floor(Math.random() * userIds.length);
                     const userDoc = await User.findById(userIds[randomUserIndex]).lean();
-                    const userNameComentario = userDoc ? userDoc.name as string : ''; // Asignación de tipo para userNameComentario
+                    const userNameComments = userDoc ? userDoc.name as string : ''; // Asignación de tipo para userNameComentario
                     const comentario = new Comentario({
                         idPost: post._id,
                         userIdPost: user._id,
-                        userIdComentario: userIds[randomUserIndex],
+                        userIdComments: userIds[randomUserIndex],
                         userNamePost: user.name,
-                        userNameComentario,
-                        comentario: faker.lorem.sentence(),
+                        userNameComments,
+                        Comments: faker.lorem.sentence(),
                     });
                     await comentario.save();
                 }
@@ -88,13 +88,13 @@ const createSeedData = async () => {
                 const randomFollowingUsers = userIds.slice(0, Math.floor(Math.random() * 10));
                 for (const followingUserId of randomFollowingUsers) {
                     const userDoc = await User.findById(followingUserId).lean();
-                    const NameUserSiguiendo = userDoc ? userDoc.name as string : ''; // Asignación de tipo para NameUserSiguiendo
+                    const NameUserFollowers = userDoc ? userDoc.name as string : ''; // Asignación de tipo para NameUserSiguiendo
                     const seguidorSeguido = new SeguidoresSeguidos({
-                        idUserSiguiendo: followingUserId,
+                        idUserFollowers: followingUserId,
                         idUser: user._id,
-                        NameUserSiguiendo,
+                        NameUserFollowers,
                         NameUser: user.name,
-                        estadoSeguiendo: 1,
+                        statusFollowers: 1,
                     });
                     await seguidorSeguido.save();
                 }

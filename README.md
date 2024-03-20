@@ -146,103 +146,6 @@ The image of the database modeling and the construction of some tables will be i
 
 The code shown below is from the UserModel
 
-```tsx
-import { Schema, model, Document, Types } from "mongoose";
-
-interface User extends Document {
-    name: string;
-    email: string;
-    password: string;
-    role: string;
-    seguidores?: Schema.Types.ObjectId;
-    siguiendo?: Schema.Types.ObjectId[];
-}
-
-const UserSchema = new Schema<User>(
-    {
-        name: {
-            type: String,
-            required: false,
-        },
-
-        email: {
-            type: String,
-            required: false,
-            unique: true,
-        },
-
-        password: {
-            type: String,
-            required: false,
-        },
-
-        role: {
-            type: String,
-            enum: ["user", "admin", "superAdmin"],
-            default: "user",
-        },
-
-    },
-    {
-        timestamps: true,
-        versionKey: false,
-    }
-)
-
-const UserModel = model<User>("User", UserSchema);
-
-export default UserModel;
-```
-
-The construction of the LikesModel is shown below.
-```tsx
-import { Document, Schema, model } from "mongoose"
-
-interface Likes extends Document {
-    idPost: Schema.Types.ObjectId;
-    userIdPost: Schema.Types.ObjectId;
-    userIdLike: Schema.Types.ObjectId;
-    titlePost: string;
-    userNamePost: string;
-    userNameLike: string;
-    like: number;
-}
-
-const likesSchema = new Schema<Likes>(
-    {
-        idPost:
-        {
-            type: Schema.Types.ObjectId,
-            ref: "PostModel"
-        },
-
-        userIdPost:
-        {
-            type: Schema.Types.ObjectId,
-            ref: "PostModel"
-        },
-
-        userIdLike:
-        {
-            type: Schema.Types.ObjectId,
-            ref: "UserModel"
-        },
-
-        titlePost: String,
-        userNamePost: String,
-        userNameLike: String,
-        like: Number,
-    },
-
-    {
-        timestamps: true,
-        versionKey: false,
-    }
-)
-
-const LikeModel = model<Likes>("Likes", likesSchema);
-export default LikeModel;
-```
 
 The database consists of five tables:
 - The UsersModel table
@@ -276,11 +179,13 @@ https://redsocial-dev-qsfd.2.us-1.fl0.io/api/auth/register
 ```
 ```jsx
 {
-    "name":"Miguel",
-    "email":"miguel@gmail.com",
-    "password": "Miguel12345."
+    "name":"Dani",
+    "email":"dani@gmail.com",
+    "password": "Dani123456789."
 }
 ```
+<img src="./src/img/dani.png">
+
 Login  POST
 ```jsx
 https://redsocial-dev-qsfd.2.us-1.fl0.io/api/auth/login
@@ -291,6 +196,8 @@ https://redsocial-dev-qsfd.2.us-1.fl0.io/api/auth/login
     "password": "Miguel12345."
 }
 ```
+<img src="./src/img/token.png">
+
 Creat Comment POST
 ```jsx
 https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comment/id
@@ -298,18 +205,13 @@ https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comment/id
 ```
 ```jsx
 {
-    "comentario": "Equipa do bairro bem atoa"  
+    "comment": "This is true"
+    
 } 
 ```
-Update Comment  PUT
-```jsx
-https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comment/id
-```
-```jsx
-{
-    "comentario": "Minha querida irmã te amo muito"
-}
-```
+
+<img src="./src/img/comment.png">
+
 <a href="./src/fichero/endpoints.md">Complete list of entpoints</a>
 
 ## Project Start-up
