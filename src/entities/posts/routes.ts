@@ -14,7 +14,4 @@ router.get('/posts/:id', auth, posts.listarPostPorId);
 router.get('/users/posts/:id', auth, posts.recuperarPostDeUnUsuarioPorId);
 
 
-
-
-
 export default router;

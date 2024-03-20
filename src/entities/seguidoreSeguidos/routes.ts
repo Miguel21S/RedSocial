@@ -8,4 +8,5 @@ router.post('/users/follow/:id', auth, seguirSiguiendo.seguirUser);
 router.get('/users/following', auth, seguirSiguiendo.listarMisSeguidores);
 router.get('/users/followers', auth, seguirSiguiendo.losSiguidos);
 
+
 export default router;

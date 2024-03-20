@@ -1,13 +1,13 @@
 
 import mongoose from "mongoose"
 import { faker } from "@faker-js/faker"
-import User from "../users/UsersModel"
-import Post from "../posts/PostsModel"
-import Like from "../likes/LikesModel";
-import Comentario from "../comentarios/ComentariosModel";
-import SeguidoresSeguidos from "../seguidoreSeguidos/seguidoresSeguidosModel";
+import User from "../../../entities/users/UsersModel"
+import Post from "../../../entities/posts/PostsModel"
+import Like from "../../../entities/likes/LikesModel";
+import Comentario from "../../../entities/comentarios/ComentariosModel";
+import SeguidoresSeguidos from "../../../entities/seguidoreSeguidos/seguidoresSeguidosModel";
 import "dotenv/config"
-import { dbConnection } from "../../core/database/db"
+import { dbConnection } from "../db"
 import bcrypt from "bcrypt"
 
 dbConnection()
