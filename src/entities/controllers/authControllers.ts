@@ -130,20 +130,20 @@ console.log("ANTES DEL FINDONE")
         });
     } catch (error: any) {
 console.log("Estoy en el catch del login")
-        return res.status(500).json(
-            {
-                error:error.message
-            }
-        )
+        // return res.status(500).json(
+        //     {
+        //         error:error.message
+        //     }
+        // )
 
-        // if(error instanceof CustomError){
-        //     error.sendResponse(res)
+        if(error instanceof CustomError){
+            error.sendResponse(res)
 
-        // } else {
+        } else {
 
-        //     const serverError = new ServerError();
-        //     serverError.sendResponse(res)
-        // }
+            const serverError = new ServerError();
+            serverError.sendResponse(res)
+        }
     }
 }
 
