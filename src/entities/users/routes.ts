@@ -7,7 +7,8 @@ import { isSuperAdmin } from "../../core/middlewares/isSuperAdmin";
 const router = Router();
 
 // router.put('/token', auth, addSiguiendo);
-router.get('/users/profile', auth, isSuperAdmin, users.listAllUsers);
+router.get('/users/profile', auth, users.myProfile)
+router.get('/users', auth, isSuperAdmin, users.listAllUsers);
 router.put('/users/profile', auth, users.updateUser);
 router.get('/users', auth, isSuperAdmin, users.updateRoleById);
 router.delete('/users/:id', auth, isSuperAdmin, users.filtrarByEmail);

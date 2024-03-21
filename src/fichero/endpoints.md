@@ -5,108 +5,113 @@
 
 User
 
-List all Profile Users
+My Profile Users (GET )
 ````jsx
-GET https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/profile
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/profile
 ````
 
-Update profile data
+List all Profile Users (GET )
 ````jsx
-PUT https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/profile
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users
+````
+
+Update profile data (PUT)
+````jsx
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/profile
 ````
 
 
-Search user by id
+Search user by email (GET)
 ````jsx
-GET https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users?email
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users
 ````
-Delete user by id
+Delete user by id (DELETE)
 ````jsx
-DELETE https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/id
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/
 ````
-Actualizar role de usuario por id
+Actualizar role de usuario por id (PUT)
 ````jsx
-PUT https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/id
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/
 ````
 
-Auth Controllers
+Auth Controllers (POST)
 ````jsx
-POST https://redsocial-dev-qsfd.2.us-1.fl0.io/api/auth/register
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/auth/register
 ````
 ````jsx
-POST https://redsocial-dev-qsfd.2.us-1.fl0.io/api/auth/login
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/auth/login
 ````
 Posts
 
-Creat post
+Creat post (POST)
 ````jsx
-POST https://redsocial-dev-qsfd.2.us-1.fl0.io/api/posts
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/posts
 ````
 
-Delete post by id
+Delete post by id (DELETE)
 ````jsx
-DELETE https://redsocial-dev-qsfd.2.us-1.fl0.io/api/posts/id
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/posts/
 ````
 
-Update post by id
+Update post by id (PUT)
 ````jsx
-PUT https://redsocial-dev-qsfd.2.us-1.fl0.io/api/posts/id
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/posts/
 ````
 
-List my posts
+List my posts (GET)
 ````jsx
-GET https://redsocial-dev-qsfd.2.us-1.fl0.io/api/posts/own/
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/posts/own/
 ````
 
-List all posts
+List all posts (GET)
 ````jsx
-GET https://redsocial-dev-qsfd.2.us-1.fl0.io/api/posts
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/posts
 ````
-Search post by id
+Search post by id (GET)
 ````jsx
-GET https://redsocial-dev-qsfd.2.us-1.fl0.io/api/posts/id
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/posts/
 ````
-Search user posts by id user
+Search user posts by id user (GET)
 
 ````jsx
-GET https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/posts/id
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/posts/
 ````
 
 Comments
 
-CreatComment
+CreatComment (POST)
 ````jsx
 https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comment/
 ````
-Delete comments by ie
+Delete comments by id (DELETE)
 ````jsx
-DELETE https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comment/id
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comment/
 ````
-Update comment by id
+Update comment by id (PUT)
 ````jsx
-PUT https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comment/id
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comment/
 ````
-Filter Comment By idComment/idPost/userName
+Filter Comment By idComment/idPost/userName (GET)
 ````jsx
-GET https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comments/filters?idPost=
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comments/filters?
 ````
 Like
-like and unlike
+like and unlike (POST)
 
 ````jsx
-POST https://redsocial-dev-qsfd.2.us-1.fl0.io/api/posts/like/
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/posts/like/
 ````
 Following and Followers
 
-Follow and unfollow
+Follow and unfollow (POST)
 ````jsx
-POST https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/follow/
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/follow/
 ````
-List of my following
+List of my following (GET)
 ````jsx
-GET https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/following
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/following
 ````
-Followers
+Followers (GET)
 ````jsx
 https://redsocial-dev-qsfd.2.us-1.fl0.io/api/users/following
 ````

@@ -4,6 +4,45 @@ import UserModel from "./UsersModel";
 import bcrypt from "bcrypt";
 import { CustomError, NotFoundError, ServerError } from "../../core/utils/errorHandling";
 
+/////////////////          METHOD MY PROFILE         /////////////////////////////////
+
+const myProfile = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+
+        const user = await UserModel.findOne( { _id: userId} );
+        if(!userId){
+            throw new NotFoundError( 'No data found in the request' );
+        }
+
+        const frofile = await UserModel.find(
+            {
+                _id: user?._id
+            }
+        )
+        .select("name")
+        .select("email")
+        
+        
+        res.status(200).json(
+            {
+                success: true,
+                message: "My Profile",
+                data: frofile
+            }
+        )
+
+    } catch (error) {
+        if( error instanceof CustomError){
+            error.sendResponse(res);
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+            
+        }
+    }
+}
 /////////////////          METHOD LIST ALL USERS         /////////////////////////////////
 const listAllUsers = async (req: Request, res: Response) => {
     try {
@@ -188,6 +227,6 @@ const updateRoleById = async (req: Request, res: Response) => {
 }
 
 export {
-    listAllUsers, updateUser, filtrarByEmail,
-    DeleteById, updateRoleById
+    myProfile, listAllUsers, updateUser,
+    filtrarByEmail, DeleteById, updateRoleById
 }
