@@ -198,9 +198,9 @@ https://redsocial-dev-qsfd.2.us-1.fl0.io/api/auth/login
 ```
 <img src="./src/img/token.png">
 
-Creat Comment POST
+Creat Comment POST by idPost
 ```jsx
-https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comment/id
+https://redsocial-dev-qsfd.2.us-1.fl0.io/api/comment/
 
 ```
 ```jsx

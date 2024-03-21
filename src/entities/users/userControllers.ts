@@ -10,20 +10,16 @@ const myProfile = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
 
-        const user = await UserModel.findOne( { _id: userId} );
-        if(!userId){
-            throw new NotFoundError( 'No data found in the request' );
+        const user = await UserModel.findOne({ _id: userId });
+        if (!userId) {
+            throw new NotFoundError('No data found in the request');
         }
 
-        const frofile = await UserModel.find(
-            {
-                _id: user?._id
-            }
-        )
-        .select("name")
-        .select("email")
-        
-        
+        const frofile = await UserModel.find({ _id: user?._id })
+            .select("name")
+            .select("email")
+
+
         res.status(200).json(
             {
                 success: true,
@@ -33,13 +29,13 @@ const myProfile = async (req: Request, res: Response) => {
         )
 
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
 
         } else {
             const serverError = new ServerError();
             serverError.sendResponse(res);
-            
+
         }
     }
 }
@@ -54,7 +50,7 @@ const listAllUsers = async (req: Request, res: Response) => {
             .select("email")
             .limit(limit)
             .skip(skip);
-            
+
         res.status(200).json(
             {
                 success: true,
@@ -62,17 +58,17 @@ const listAllUsers = async (req: Request, res: Response) => {
                 data: lista
             }
         )
-   
+
     } catch (error) {
-           if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
 
-           } else {
+        } else {
 
             const serverError = new ServerError();
             serverError.sendResponse(res);
-           }
-        
+        }
+
     }
 };
 
@@ -110,13 +106,13 @@ const updateUser = async (req: Request, res: Response) => {
         )
 
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
 
         } else {
             const serverError = new ServerError();
             serverError.sendResponse(res);
-            
+
         }
     }
 }
@@ -143,13 +139,13 @@ const filtrarByEmail = async (req: Request, res: Response) => {
             data: getEmail
         })
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
 
         } else {
             const serverError = new ServerError();
             serverError.sendResponse(res);
-            
+
         }
     }
 }
@@ -158,15 +154,15 @@ const filtrarByEmail = async (req: Request, res: Response) => {
 const DeleteById = async (req: Request, res: Response) => {
     try {
         const userId = req.params.id;
-        
+
         const confirmar = await UserModel.findOne(
             {
-                _id:userId
+                _id: userId
             }
         )
 
-        if(!confirmar){
-            throw new NotFoundError( 'No data found in the request' );
+        if (!confirmar) {
+            throw new NotFoundError('No data found in the request');
         }
         const deleteUser = await UserModel.findByIdAndDelete(userId)
 
@@ -177,13 +173,13 @@ const DeleteById = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
 
         } else {
             const serverError = new ServerError();
             serverError.sendResponse(res);
-            
+
         }
     }
 }
@@ -207,7 +203,7 @@ const updateRoleById = async (req: Request, res: Response) => {
         )
 
         if (!updateRole) {
-            throw new NotFoundError( 'No data found in the request' )
+            throw new NotFoundError('No data found in the request')
         }
 
         res.status(200).json({
@@ -215,13 +211,13 @@ const updateRoleById = async (req: Request, res: Response) => {
             message: "Role successfully updated"
         });
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
 
         } else {
             const serverError = new ServerError();
             serverError.sendResponse(res);
-            
+
         }
     }
 }
