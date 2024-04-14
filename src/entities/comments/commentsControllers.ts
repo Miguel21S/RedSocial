@@ -42,9 +42,42 @@ const createComment = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
-            
+
+        } else {
+            const serverError = new ServerError();
+            serverError.sendResponse(res);
+        }
+    }
+}
+
+const getAllPosts = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.usuarioId;
+        let limit = Number(req.query.limit) || 10
+        const page = Number(req.query.page) || 1
+        const skip = (page - 1) * limit
+
+        const post = await PostModel.find()
+
+        const commentsDPost = await CommentsModel.find({ idPost: post })
+            .select("Comments")
+            .select("idPost")
+            .limit(limit)
+            .skip(skip)
+
+        return res.status(200).json(
+            {
+                success: true,
+                message: " **************** ",
+                data: commentsDPost
+            }
+        )
+    } catch (error) {
+        if (error instanceof CustomError) {
+            error.sendResponse(res);
+
         } else {
             const serverError = new ServerError();
             serverError.sendResponse(res);
@@ -81,11 +114,11 @@ const searchComment = async (req: Request, res: Response) => {
         }
 
         const showIdComment = await CommentsModel.find(queryfiltrs)
-        .select("userNamePost")
-        .select("userNameComentario")
-        .select("comentario")
-        .limit(limit)
-        .skip(skip)
+            .select("userNamePost")
+            .select("userNameComentario")
+            .select("comentario")
+            .limit(limit)
+            .skip(skip)
 
         res.status(200).json(
             {
@@ -96,9 +129,9 @@ const searchComment = async (req: Request, res: Response) => {
         )
 
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
-            
+
         } else {
             const serverError = new ServerError();
             serverError.sendResponse(res);
@@ -145,9 +178,9 @@ const editComment = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
-            
+
         } else {
             const serverError = new ServerError();
             serverError.sendResponse(res);
@@ -179,7 +212,7 @@ const deleteComment = async (req: Request, res: Response) => {
         )
 
         if (!donoPostId && !donoIdUserComentario) {
-            throw new ForbiddenError( 'User not allowed' )
+            throw new ForbiddenError('User not allowed')
         }
 
         const comentarioEliminar = await CommentsModel.findByIdAndDelete(commentId);
@@ -192,9 +225,9 @@ const deleteComment = async (req: Request, res: Response) => {
         )
 
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
-            
+
         } else {
             const serverError = new ServerError();
             serverError.sendResponse(res);
@@ -203,7 +236,8 @@ const deleteComment = async (req: Request, res: Response) => {
 }
 
 export {
-    createComment,searchComment,
-     editComment, deleteComment,
-    
+    createComment, searchComment,
+    editComment, deleteComment,
+    getAllPosts
+
 }

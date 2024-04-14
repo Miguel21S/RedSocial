@@ -10,4 +10,7 @@ router.get('/comment/filters', auth, comment.searchComment);
 router.put('/comment/:id', auth, comment.editComment);
 router.delete('/comment/:id', auth, comment.deleteComment);
 
+
+router.get('/comment/now', auth, comment.getAllPosts);
+
 export default router;

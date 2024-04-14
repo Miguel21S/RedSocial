@@ -33,13 +33,18 @@ const createSeedData = async () => {
         // Crear 20 usuarios y recoger sus IDs
         let userIds = []; // Inicializar el arreglo de userIds
         for (let i = 0; i < 10; i++) {
+            const userName = faker.internet.userName().toLowerCase(); // Convertir nombre de usuario a minúsculas
+            const userEmail = faker.internet.email().toLowerCase(); // Convertir correo electrónico a minúsculas
             const user = new User({
-                name: faker.internet.userName(),
-                email: faker.internet.email(),
+                name: userName,
+                email: userEmail,
                 password: bcrypt.hashSync("User123456789.", 8),
             });
             await user.save();
             userIds.push(user._id); // Añadir el ID del usuario recién creado al arreglo de userIds
+
+            // Conjunto para mantener un registro de las relaciones de seguimiento
+            const followingSet = new Set();
 
             // Para cada usuario, crear 10 posts
             for (let j = 0; j < 10; j++) {
@@ -52,7 +57,7 @@ const createSeedData = async () => {
                 await post.save();
 
                 // Crear likes para cada post
-                for (let k = 0; k < Math.floor(Math.random() * 7); k++) {
+                for (let k = 0; k < Math.floor(Math.random() * 4); k++) {
                     const randomUserIndex = Math.floor(Math.random() * userIds.length);
                     const userDoc = await User.findById(userIds[randomUserIndex]).lean();
                     const userNameLike = userDoc ? userDoc.name as string : ''; // Asignación de tipo para userNameLike
@@ -87,16 +92,21 @@ const createSeedData = async () => {
                 // Crear relaciones de seguimiento
                 const randomFollowingUsers = userIds.slice(0, Math.floor(Math.random() * 10));
                 for (const followingUserId of randomFollowingUsers) {
-                    const userDoc = await User.findById(followingUserId).lean();
-                    const NameUserFollowers = userDoc ? userDoc.name as string : ''; // Asignación de tipo para NameUserSiguiendo
-                    const seguidorSeguido = new SeguidoresSeguidos({
-                        idUserFollowers: followingUserId,
-                        idUser: user._id,
-                        NameUserFollowers,
-                        NameUser: user.name,
-                        statusFollowers: 1,
-                    });
-                    await seguidorSeguido.save();
+                    // Verificar que el usuario no se está siguiendo a sí mismo y que la relación no existe en el conjunto
+                    if (followingUserId !== user._id && !followingSet.has(`${user._id}-${followingUserId}`)) {
+                        const userDoc = await User.findById(followingUserId).lean();
+                        const NameUserFollowers = userDoc ? userDoc.name.toLowerCase() : '';
+                        const seguidorSeguido = new SeguidoresSeguidos({
+                            idUserFollowers: followingUserId,
+                            idUser: user._id,
+                            NameUserFollowers,
+                            NameUser: user.name,
+                            statusFollowers: 1,
+                        });
+                        await seguidorSeguido.save();
+                        // Agregar la relación al conjunto
+                        followingSet.add(`${user._id}-${followingUserId}`);
+                    }
                 }
             }
         }
@@ -110,3 +120,5 @@ const createSeedData = async () => {
 };
 
 createSeedData();
+
+

@@ -1,5 +1,6 @@
 
 import express, { Application } from "express";
+import cors from "cors";
 // import bodyParser from "body-parser";
 import "dotenv/config";
 import { dbConnection } from "./core/database/db";
@@ -13,6 +14,8 @@ import routerSeguirSiguiendo from "./entities/followingFollowers/routes"
 const app: Application = express();
 const PORT = process.env.PORT || 4998;
 app.use(express.json());
+app.use(cors());
+
 
 app.use('/api', routerController);
 app.use('/api', routerUser);

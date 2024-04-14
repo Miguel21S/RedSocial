@@ -3,14 +3,21 @@ import PostModel from "./PostsModel";
 import UserModel from "../users/UsersModel";
 import { CustomError, ForbiddenError, NotFoundError, ServerError } from "../../core/utils/errorHandling";
 
+// import CommentsModel from "../comments/CommentsModel";
+
+
 ///////////////////////////          CREATE POST METHOD           /////////////////////////////////////
 const creatPost = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
-        const { title, tests } = req.body;
+        const title = req.body.title;
+        const tests = req.body.tests;
 
         const user = await UserModel.findOne({ _id: userId })
-    
+        if (!user) {
+            throw new NotFoundError("Not found user");
+        }
+
         const publicPost = await PostModel.create(
             {
                 title,
@@ -19,7 +26,7 @@ const creatPost = async (req: Request, res: Response) => {
                 userName: user?.name
             },
         )
-       
+
         res.status(200).json(
             {
                 success: true,
@@ -29,7 +36,7 @@ const creatPost = async (req: Request, res: Response) => {
         )
 
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
 
         } else {
@@ -46,28 +53,18 @@ const updatePostById = async (req: Request, res: Response) => {
         const postId = req.params.id;
         const { title, tests } = req.body
 
-        const user = await UserModel.findOne( { _id: userId } )
-
-        const foundPostById = await PostModel.findOne( { _id: postId } )
+        const foundPostById = await PostModel.findOne({_id: postId, userIdPost: userId  })
 
         if (!foundPostById) {
-            throw new NotFoundError( 'No data found in the request' );
-        }
-
-        const userIdEnPost = await PostModel.findOne( { userIdPost: foundPostById?.id } )
-
-        if (userIdEnPost?.id !== user?.id) {
-            throw new ForbiddenError( 'User not allowed' )
+            throw new NotFoundError('No data found in the request');
         }
 
         const updatePost = await PostModel.findByIdAndUpdate(
-            {  _id: postId },
-            
+            { _id: postId },
             {
                 title: title,
                 tests: tests
             },
-
             { new: true }
         )
 
@@ -79,7 +76,7 @@ const updatePostById = async (req: Request, res: Response) => {
         )
 
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
 
         } else {
@@ -93,32 +90,33 @@ const updatePostById = async (req: Request, res: Response) => {
 const listMyPosts = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
-        let limit = Number(req.query.limit) || 10
-        const page = Number(req.query.page) || 1
-        const skip = (page - 1) * limit
-
+        // let limit = Number(req.query.limit) || 10
+        // const page = Number(req.query.page) || 1
+        // const skip = (page - 1) * limit
+        
         const user = await UserModel.findOne
-            (
-                { _id: userId }
-            )
-
+        (
+            { _id: userId }
+        )
+        
+        const cantDePosts = await PostModel.countDocuments({ userIdPost: user?.id });
         const userIdInPost = await PostModel.find(
             { userIdPost: user?.id }
         )
-        .limit(limit)
-        .skip(skip)
-
+        // .limit(limit)
+        // .skip(skip)
         res.status(200).json(
             {
                 success: true,
                 message: "List of posts",
-                data: userIdInPost
+                data: userIdInPost,
+                postsCount: cantDePosts
             }
         )
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
-
+            
         } else {
             const serverError = new ServerError();
             serverError.sendResponse(res);
@@ -126,17 +124,53 @@ const listMyPosts = async (req: Request, res: Response) => {
     }
 }
 
+///////////////////////////          NO ES NECESARIO       /////////////////////////////
+// const tamanoMyPosts = async (req: Request, res: Response) => {
+//     try {
+//         const userId = req.tokenData.usuarioId;
+//         // let limit = Number(req.query.limit) || 10
+//         // const page = Number(req.query.page) || 1
+//         // const skip = (page - 1) * limit
+
+//         const user = await UserModel.findOne( { _id: userId } )
+
+//         const cantDePosts = await PostModel.countDocuments({ userIdPost: user?.id });
+//         // const userIdInPost = await PostModel.find(
+//         //     { userIdPost: user?.id }
+//         // )
+//         // .limit(limit)
+//         // .skip(skip)
+//         res.status(200).json(
+//             {
+//                 success: true,
+//                 message: "List of posts",
+//                 postsCount: cantDePosts
+//             }
+//         )
+//     } catch (error) {
+//         if (error instanceof CustomError) {
+//             error.sendResponse(res);
+
+//         } else {
+//             const serverError = new ServerError();
+//             serverError.sendResponse(res);
+//         }
+//     }
+// }
+
+
+
 ///////////////////////////          LIST POSTS METHOD       /////////////////////////////
 const listPosts = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
-        let limit = Number(req.query.limit) || 10
-        const page = Number(req.query.page) || 1
-        const skip = (page - 1) * limit
+        // let limit = Number(req.query.limit) || 10
+        // const page = Number(req.query.page) || 1
+        // const skip = (page - 1) * limit
 
         const listPosts = await PostModel.find()
-        .limit(limit)
-        .skip(skip)
+        // .limit(limit)
+        // .skip(skip)
 
         res.status(200).json(
             {
@@ -146,7 +180,7 @@ const listPosts = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
 
         } else {
@@ -163,12 +197,12 @@ const listPostById = async (req: Request, res: Response) => {
         const postId = req.params.id;
 
         const listPost = await PostModel.findOne
-        (
-            { _id: postId }
-        )
+            (
+                { _id: postId }
+            )
 
-        if(!listPost){
-            throw new NotFoundError( 'No list data found in the application' );
+        if (!listPost) {
+            throw new NotFoundError('No list data found in the application');
         }
 
         res.status(200).json(
@@ -179,7 +213,7 @@ const listPostById = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
 
         } else {
@@ -198,16 +232,16 @@ const retrieveUserPostById = async (req: Request, res: Response) => {
         const page = Number(req.query.page) || 1
         const skip = (page - 1) * limit
 
-        const IdUser = await UserModel.findById( idUserEnPost )
-        if(!IdUser){
-             throw new NotFoundError( 'No user data found in the request' );
+        const IdUser = await UserModel.findById(idUserEnPost)
+        if (!IdUser) {
+            throw new NotFoundError('No user data found in the request');
         }
 
         const foundUserIdInPost = await PostModel.findOne(
             { userIdPost: IdUser?.id }
         )
 
-        if( foundUserIdInPost?.id !== IdUser?.id ){
+        if (foundUserIdInPost?.id !== IdUser?.id) {
             return res.json(
                 {
                     success: false,
@@ -217,11 +251,11 @@ const retrieveUserPostById = async (req: Request, res: Response) => {
         }
 
         const foundUserIdInPosts = await PostModel.find(
-            { userIdPost: IdUser?.id}
+            { userIdPost: IdUser?.id }
         )
-        .limit(limit)
-        .skip(skip)
-        
+            .limit(limit)
+            .skip(skip)
+
         return res.status(200).json(
             {
                 success: true,
@@ -230,7 +264,7 @@ const retrieveUserPostById = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
 
         } else {
@@ -246,27 +280,13 @@ const deletePostById = async (req: Request, res: Response) => {
         const userId = req.tokenData.usuarioId;
         const postId = req.params.id;
 
-        const user = await UserModel.findOne( { _id: userId } )
+        const post = await PostModel.findOne({ _id: postId, userIdPost: userId });
 
-        const foundPostById = await PostModel.findOne( { _id: postId } )
-
-        if (!foundPostById) {
-            throw new NotFoundError( 'No data found in the request' );
+        if (!post) {
+            throw new ForbiddenError("The post was not found or you do not have permissions to delete it.");
         }
 
-        const userIdInPost = await PostModel.findOne(
-            {
-                userIdPost: foundPostById?.id
-            }
-        )
-
-        if (userIdInPost?.id !== user?.id) {
-            throw new ForbiddenError( 'User not allowed' )
-
-        }
-
-        const deletePost = await PostModel.findByIdAndDelete(postId)
-
+        await post.deleteOne();
         res.status(200).json(
             {
                 success: true,
@@ -274,7 +294,7 @@ const deletePostById = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
 
         } else {

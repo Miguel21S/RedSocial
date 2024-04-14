@@ -14,7 +14,6 @@ const PostSchema = new Schema<Post>(
         userName: String,
         title: String,
         tests: String,
-        
         userIdPost:
         {
             type: Schema.Types.ObjectId,

@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 import { CustomError, NotFoundError, ServerError } from "../../core/utils/errorHandling";
 
 /////////////////          METHOD MY PROFILE         /////////////////////////////////
-
 const myProfile = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.usuarioId;
@@ -18,7 +17,6 @@ const myProfile = async (req: Request, res: Response) => {
         const frofile = await UserModel.find({ _id: user?._id })
             .select("name")
             .select("email")
-
 
         res.status(200).json(
             {
