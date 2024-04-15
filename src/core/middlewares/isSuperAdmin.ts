@@ -10,7 +10,7 @@ export const isSuperAdmin = async (req: CustomRequest, res: Response, next: Next
         let userRole;
         const user = await UserModel.findById(
             {
-                _id: req.tokenData.usuarioId
+                _id: req.tokenData.userId
             }
         )
         if (!user) {

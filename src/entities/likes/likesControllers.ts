@@ -8,7 +8,7 @@ import { CustomError, NotFoundError, ServerError } from "../../core/utils/errorH
 
 const darlikes = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         const postId = req.params.id;
         let like = 1;
 

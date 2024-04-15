@@ -7,7 +7,7 @@ import followingFollowersModel from "./followingFollowersModel";
 ///////////////////////////           FOLLOW AND STOP FOLLOWING METHOD      /////////////////////////////////////
 const followingUser = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         const idUserFollowers = req.params.id;
         let statusFollowers = 1;
 
@@ -78,7 +78,7 @@ const followingUser = async (req: Request, res: Response) => {
 ///////////////////////////           METHOD THAT LISTS ALL MY FOLLOWERS      /////////////////////////////////////
 const listMyFollowing = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         // let limit = Number(req.query.limit) || 10
         // const page = Number(req.query.page) || 1
         // const skip = (page - 1) * limit
@@ -114,7 +114,7 @@ const listMyFollowing = async (req: Request, res: Response) => {
 ///////////////////////////           METHOD TO FOLLOW WHICH LIST THE USERS I FOLLOW      /////////////////////////////////////
 const followers = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         // let limit = Number(req.query.limit) || 10
         // const page = Number(req.query.page) || 1
         // const skip = (page - 1) * limit

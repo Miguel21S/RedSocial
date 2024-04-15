@@ -9,7 +9,7 @@ import CommentsModel from "./CommentsModel";
 ////////////////////////// COMMENTARY METHOD     ////////////////////////
 const createComment = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         const postId = req.params.id;
         const { comments } = req.body;
 
@@ -54,7 +54,7 @@ const createComment = async (req: Request, res: Response) => {
 
 const getAllPosts = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         let limit = Number(req.query.limit) || 10
         const page = Number(req.query.page) || 1
         const skip = (page - 1) * limit
@@ -88,7 +88,7 @@ const getAllPosts = async (req: Request, res: Response) => {
 ////////////////////////// FILTER COMMENT SEARCH METHOD     ////////////////////////
 const searchComment = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         const { idComment, idPos, userName } = req.query;
         let limit = Number(req.query.limit) || 10
         const page = Number(req.query.page) || 1
@@ -142,7 +142,7 @@ const searchComment = async (req: Request, res: Response) => {
 ////////////////////////// EDIT COMMENT METHOD     ////////////////////////
 const editComment = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         const { comment } = req.body;
         const commentId = req.params.id;
 
@@ -191,7 +191,7 @@ const editComment = async (req: Request, res: Response) => {
 ////////////////////////// DELETE COMMENT METHOD     ////////////////////////
 const deleteComment = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         const idComment = req.params.id;
 
         const user = await UserModel.findOne({ _id: userId });

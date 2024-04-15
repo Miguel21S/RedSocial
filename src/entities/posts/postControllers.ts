@@ -9,7 +9,7 @@ import { CustomError, ForbiddenError, NotFoundError, ServerError } from "../../c
 ///////////////////////////          CREATE POST METHOD           /////////////////////////////////////
 const creatPost = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         const title = req.body.title;
         const tests = req.body.tests;
 
@@ -49,7 +49,7 @@ const creatPost = async (req: Request, res: Response) => {
 ///////////////////////////          METHOD UPDATE POST BY ID       /////////////////////////////
 const updatePostById = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId
+        const userId = req.tokenData.userId
         const postId = req.params.id;
         const { title, tests } = req.body
 
@@ -89,7 +89,7 @@ const updatePostById = async (req: Request, res: Response) => {
 ///////////////////////////          METHOD LIST MY POSTS       /////////////////////////////
 const listMyPosts = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         // let limit = Number(req.query.limit) || 10
         // const page = Number(req.query.page) || 1
         // const skip = (page - 1) * limit
@@ -127,7 +127,7 @@ const listMyPosts = async (req: Request, res: Response) => {
 ///////////////////////////          NO ES NECESARIO       /////////////////////////////
 // const tamanoMyPosts = async (req: Request, res: Response) => {
 //     try {
-//         const userId = req.tokenData.usuarioId;
+//         const userId = req.tokenData.userId;
 //         // let limit = Number(req.query.limit) || 10
 //         // const page = Number(req.query.page) || 1
 //         // const skip = (page - 1) * limit
@@ -163,7 +163,7 @@ const listMyPosts = async (req: Request, res: Response) => {
 ///////////////////////////          LIST POSTS METHOD       /////////////////////////////
 const listPosts = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         // let limit = Number(req.query.limit) || 10
         // const page = Number(req.query.page) || 1
         // const skip = (page - 1) * limit
@@ -193,7 +193,7 @@ const listPosts = async (req: Request, res: Response) => {
 ///////////////////////////          LIST POSTS BY ID METHOD      /////////////////////////////
 const listPostById = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         const postId = req.params.id;
 
         const listPost = await PostModel.findOne
@@ -226,7 +226,7 @@ const listPostById = async (req: Request, res: Response) => {
 ///////////////////////////          METHOD TO RETRIEVE POSTS OF A USER BY ID      /////////////////////////////
 const retrieveUserPostById = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         const idUserEnPost = req.params.id;
         let limit = Number(req.query.limit) || 10
         const page = Number(req.query.page) || 1
@@ -277,7 +277,7 @@ const retrieveUserPostById = async (req: Request, res: Response) => {
 ///////////////////////////          DELETE POST METHOD           /////////////////////////////////////
 const deletePostById = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.usuarioId;
+        const userId = req.tokenData.userId;
         const postId = req.params.id;
 
         const post = await PostModel.findOne({ _id: postId, userIdPost: userId });
