@@ -11,8 +11,8 @@ router.get('/users/profile', auth, users.myProfile)
 router.get('/users', auth, isSuperAdmin, users.listAllUsers);
 router.put('/users/profile', auth, users.updateUser);
 router.get('/users', auth, isSuperAdmin, users.updateRoleById);
-router.delete('/users/:id', auth, isSuperAdmin, users.filtrarByEmail);
-router.put('/users/:id', auth, isSuperAdmin, users.DeleteById);
+router.delete('/users/:id', auth, isSuperAdmin, users.DeleteById);
+router.put('/users/:id', auth, isSuperAdmin, users.filtrarByEmail);
 
 
 export default router;

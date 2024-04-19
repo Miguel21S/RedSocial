@@ -21,7 +21,7 @@ class CustomError extends Error {
 }
 
 class UnauthorizedError extends CustomError {
-    constructor(message = 'Unauthorized user') {
+    constructor(message = 'Unauthorized userrrr') {
         super(message, 401);
     }
 }

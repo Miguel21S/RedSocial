@@ -25,7 +25,7 @@ const createSeedData = async () => {
         const superAdmin = new User({
             name: "super Admin",
             email: "superadmin@superadmin.com",
-            password: bcrypt.hashSync("Super123456789.", 8),
+            password: bcrypt.hashSync("Super12345.", 8),
             role: "superAdmin",
         });
         await superAdmin.save();
@@ -38,7 +38,7 @@ const createSeedData = async () => {
             const user = new User({
                 name: userName,
                 email: userEmail,
-                password: bcrypt.hashSync("User123456789.", 8),
+                password: bcrypt.hashSync("User123456.", 8),
             });
             await user.save();
             userIds.push(user._id); // Añadir el ID del usuario recién creado al arreglo de userIds

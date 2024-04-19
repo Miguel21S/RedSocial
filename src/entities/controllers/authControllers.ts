@@ -83,11 +83,7 @@ const login = async (req: Request, res: Response) => {
             )
         }
 
-        const user = await UserModel.findOne(
-            {
-                email: email
-            }
-        ).select("password")
+        const user = await UserModel.findOne( { email: email } )
 
         if (!user) {
             return res.status(404).json(
@@ -97,10 +93,8 @@ const login = async (req: Request, res: Response) => {
                 }
             )
         }
-
         ///////    VALIDAR PASSWORD
         const validarPwd = bcrypt.compareSync(password, user!.password);
-        
         if (!validarPwd) {
             return res.json(
                 {
@@ -113,6 +107,8 @@ const login = async (req: Request, res: Response) => {
         ///////////     CREAR TOKEN 
         const token = jwt.sign(
             {
+                name:user.name,
+                email:user.email,
                 userId: user._id,
                 userRole: user.role
             },
@@ -129,13 +125,6 @@ const login = async (req: Request, res: Response) => {
             token: token,
         });
     } catch (error: any) {
-
-        // return res.status(500).json(
-        //     {
-        //         error:error.message
-        //     }
-        // )
-
         if(error instanceof CustomError){
             error.sendResponse(res)
 

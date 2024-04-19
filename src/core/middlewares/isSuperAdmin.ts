@@ -19,18 +19,18 @@ export const isSuperAdmin = async (req: CustomRequest, res: Response, next: Next
         }
 
         userRole = user.role
-        if( userRole !== "superAdmin"){
-            throw new UnauthorizedError( 'Unauthorized user' )
+        if (userRole !== "superAdmin") {
+            throw new UnauthorizedError('Unauthorized user')
         }
         next();
     } catch (error) {
-        if( error instanceof CustomError){
+        if (error instanceof CustomError) {
             error.sendResponse(res);
 
         } else {
             const serverError = new ServerError();
             serverError.sendResponse(res);
-            
+
         }
     }
 }

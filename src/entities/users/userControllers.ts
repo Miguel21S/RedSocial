@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 import UserModel from "./UsersModel";
 import bcrypt from "bcrypt";
-import { CustomError, NotFoundError, ServerError } from "../../core/utils/errorHandling";
+import { CustomError, NotFoundError, ServerError, UnauthorizedError } from "../../core/utils/errorHandling";
 
 /////////////////          METHOD MY PROFILE         /////////////////////////////////
 const myProfile = async (req: Request, res: Response) => {
@@ -40,16 +40,16 @@ const myProfile = async (req: Request, res: Response) => {
 /////////////////          METHOD LIST ALL USERS         /////////////////////////////////
 const listAllUsers = async (req: Request, res: Response) => {
     try {
-        let limit = Number(req.query.limit) || 10
-        const page = Number(req.query.page) || 1
-        const skip = (page - 1) * limit
-        
+        // let limit = Number(req.query.limit) || 10
+        // const page = Number(req.query.page) || 1
+        // const skip = (page - 1) * limit
+
         const lista = await UserModel.find()
             .select("name")
             .select("email")
             .select("role")
-            .limit(limit)
-            .skip(skip);
+        // .limit(limit)
+        // .skip(skip);
 
         res.status(200).json(
             {
@@ -99,7 +99,7 @@ const updateUser = async (req: Request, res: Response) => {
 
         res.status(200).json(
             {
-                success: false,
+                success: true,
                 message: "Data updated with success",
                 data: updateUser
             }
@@ -151,27 +151,56 @@ const filtrarByEmail = async (req: Request, res: Response) => {
 }
 
 /////////////////          MÉTODO ELIMINAR POR ID         /////////////////////////////////
+///////////////  REVISAR METODO ELIMINAR USUARIO  ///////////////////////
 const DeleteById = async (req: Request, res: Response) => {
     try {
+        const userIdLogin = req.tokenData.userId;
         const userId = req.params.id;
 
-        const confirmar = await UserModel.findOne(
-            {
-                _id: userId
-            }
-        )
+        console.log("userIdLogin: ", userIdLogin)
+        console.log("ID PARAMS: ", userId);
 
-        if (!confirmar) {
-            throw new NotFoundError('No data found in the request');
+        const userToken = await UserModel.findById({ _id: userIdLogin });
+        console.log("userToken: ", userToken)
+        if (!userToken) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
         }
-        const deleteUser = await UserModel.findByIdAndDelete(userId)
+        if (userToken.role  !== "superAdmin") {
+            throw new UnauthorizedError ("You do not have authorization to delete users");
+            // return res.status(403).json({
+            //     success: false,
+            //     message: "You do not have authorization to delete users"
+            // });
+        }
+        console.log("userToken.userRole: ", userToken.role)
 
-        res.status(200).json(
-            {
-                success: true,
-                message: "User successfully deleted"
-            }
-        )
+        const userToDelete = await UserModel.findById(userId);
+
+        if (!userToDelete) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        if (userToDelete?._id.userRole === "superAdmin") {
+            return res.status(403).json({
+                success: false,
+                message: "You cannot delete a superAdmin user"
+            });
+        }
+
+        await UserModel.findByIdAndDelete(userId);
+
+        console.log("userToDelete: ", userToDelete)
+
+        res.status(200).json({
+            success: true,
+            message: "User successfully deleted"
+        });
     } catch (error) {
         if (error instanceof CustomError) {
             error.sendResponse(res);
