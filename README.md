@@ -9,11 +9,9 @@
 
 <li><a href="#tecnologías">Technologies</a> </li>
 
-<li> <a href="#Database-structure-and-design">Database structure and design</a> </li>
+<li> <a href="#database-structure-and-design">Database structure and design</a> </li>
 
-<li> <a href="#estado-del-proyecto">Status of the Projectol</a> </li>
-
-<li> <a href="#description-of-technologies">Description of technologies</a> </li>
+<li> <a href="#status-of-the-projecto">Status of the Projecto</a> </li>
 
 <li> <a href="#endpoints">Endpoints</a> </li>
 
@@ -154,7 +152,7 @@ The database consists of five tables:
 - The LikesModel table that references the PostsModel and UsersModel models
 - The table FollowersFollowersModel that makes reference to UsersModel
 
-## Status of the Projectol
+## Status of the Projecto
 
 The project is concluded, since it meets all the requirements acquired for the system provided, which is the creation of a Social Network on behalf of the bankend.
 
