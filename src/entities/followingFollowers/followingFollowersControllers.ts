@@ -50,9 +50,9 @@ const followingUser = async (req: Request, res: Response) => {
                 {
                     statusFollowers: statusFollowers,
                     idUserFollowers: userFollowers?._id,
-                    NameUserFollowers: userFollowers?.name,
+                    nameUserFollowers: userFollowers?.name,
                     idUser: user?._id,
-                    NameUser: user?.name
+                    nameUser: user?.name
                 }
             );
         }
@@ -90,7 +90,7 @@ const listMyFollowing = async (req: Request, res: Response) => {
 
         const cantFollew = await followingFollowersModel.countDocuments({ idUserFollowers: userId, statusFollowers: 1 });
         const misSeguidores = await followingFollowersModel.find( { idUserFollowers: userId, statusFollowers: 1 }  )
-        .select("NameUser")
+        .select("nameUser")
         // .limit(limit)
         // .skip(skip);
 
@@ -126,7 +126,7 @@ const followers = async (req: Request, res: Response) => {
 
         const cantFollow = await followingFollowersModel.countDocuments({ idUser: userId, statusFollowers: 1  });
         const follow = await followingFollowersModel.find({ idUser: userId, statusFollowers: 1 })
-        .select("NameUserFollowers")
+        .select("nameUserFollowers")
         // .limit(limit)
         // .skip(skip)
 

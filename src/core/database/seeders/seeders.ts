@@ -95,12 +95,12 @@ const createSeedData = async () => {
                     // Verificar que el usuario no se está siguiendo a sí mismo y que la relación no existe en el conjunto
                     if (followingUserId !== user._id && !followingSet.has(`${user._id}-${followingUserId}`)) {
                         const userDoc = await User.findById(followingUserId).lean();
-                        const NameUserFollowers = userDoc ? userDoc.name.toLowerCase() : '';
+                        const nameUserFollowers = userDoc ? userDoc.name.toLowerCase() : '';
                         const seguidorSeguido = new SeguidoresSeguidos({
                             idUserFollowers: followingUserId,
                             idUser: user._id,
-                            NameUserFollowers,
-                            NameUser: user.name,
+                            nameUserFollowers,
+                            nameUser: user.name,
                             statusFollowers: 1,
                         });
                         await seguidorSeguido.save();

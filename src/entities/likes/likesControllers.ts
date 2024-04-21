@@ -18,6 +18,7 @@ const darlikes = async (req: Request, res: Response) => {
         }
 
         const post = await PostModel.findOne({ _id: postId });
+
         if (!post) {
             throw new NotFoundError(' No pos data found in the application ');
         }
@@ -51,7 +52,6 @@ const darlikes = async (req: Request, res: Response) => {
             )
         }
         const cantLike = await LikeModel.countDocuments({ idPost: postId, like: 1 });
-        console.log("cantidad: ", cantLike)
 
         res.status(200).json(
             {
@@ -92,7 +92,7 @@ const listAllPostsWithLikes = async (req: Request, res: Response) => {
             };
         }));
 
-        const count = await PostModel.countDocuments()
+        const count = await LikeModel.countDocuments()
         res.json({
             success: true,
             data: postsWithLikes,

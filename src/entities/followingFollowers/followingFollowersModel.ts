@@ -4,8 +4,8 @@ import { Document, Schema, model } from "mongoose";
 interface followingFollowers extends Document {
     idUserFollowers: Schema.Types.ObjectId;
     idUser: Schema.Types.ObjectId;
-    NameUserFollowers: string;
-    NameUser: string;
+    nameUserFollowers: string;
+    nameUser: string;
     statusFollowers: number;
 }
 
@@ -21,8 +21,8 @@ const followingFollowersSchema = new Schema<followingFollowers>(
             ref: 'UserModel',
         },
 
-        NameUserFollowers: String,
-        NameUser: String,
+        nameUserFollowers: String,
+        nameUser: String,
         statusFollowers: Number,
 
     },
